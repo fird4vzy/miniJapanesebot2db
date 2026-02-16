@@ -1,0 +1,2433 @@
+[
+  {
+    "word": "猫",
+    "romaji": "Neko",
+    "en_meaning": "Cat",
+    "ru_meaning": "Кошка",
+    "example": {
+      "jp": "猫がベッドで寝ています。",
+      "romaji": "Neko ga beddo de nete imasu.",
+      "en": "The cat is sleeping on the bed.",
+      "ru": "Кошка спит на кровати."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "勉強",
+    "romaji": "Benkyou",
+    "en_meaning": "Study",
+    "ru_meaning": "Учеба",
+    "example": {
+      "jp": "日本語を勉強しています。",
+      "romaji": "Nihongo o benkyou shite imasu.",
+      "en": "I am studying Japanese.",
+      "ru": "Я учу японский язык."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "家族",
+    "romaji": "Kazoku",
+    "en_meaning": "Family",
+    "ru_meaning": "Семья",
+    "example": {
+      "jp": "私の家族は五人です。",
+      "romaji": "Watashi no kazoku wa gonin desu.",
+      "en": "There are five people in my family.",
+      "ru": "В моей семье пять человек."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "水",
+    "romaji": "Mizu",
+    "en_meaning": "Water",
+    "ru_meaning": "Вода",
+    "example": {
+      "jp": "水を一杯ください。",
+      "romaji": "Mizu o ippai kudasai.",
+      "en": "A glass of water, please.",
+      "ru": "Дайте, пожалуйста, стакан воды."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "旅行",
+    "romaji": "Ryokou",
+    "en_meaning": "Travel / Trip",
+    "ru_meaning": "Путешествие",
+    "example": {
+      "jp": "日本へ旅行に行きたいです。",
+      "romaji": "Nihon e ryokou ni ikitai desu.",
+      "en": "I want to go on a trip to Japan.",
+      "ru": "Я хочу поехать в путешествие в Японию."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "仕事",
+    "romaji": "Shigoto",
+    "en_meaning": "Work / Job",
+    "ru_meaning": "Работа",
+    "example": {
+      "jp": "今日の仕事は大変でした。",
+      "romaji": "Kyou no shigoto wa taihen deshita.",
+      "en": "Today's work was hard.",
+      "ru": "Сегодняшняя работа была тяжелой."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "空",
+    "romaji": "Sora",
+    "en_meaning": "Sky",
+    "ru_meaning": "Небо",
+    "example": {
+      "jp": "空がとても青いです。",
+      "romaji": "Sora ga totemo aoi desu.",
+      "en": "The sky is very blue.",
+      "ru": "Небо очень синее."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "花",
+    "romaji": "Hana",
+    "en_meaning": "Flower",
+    "ru_meaning": "Цветок",
+    "example": {
+      "jp": "庭に綺麗な花が咲いています。",
+      "romaji": "Niwa ni kireina hana ga saite imasu.",
+      "en": "Beautiful flowers are blooming in the garden.",
+      "ru": "В саду цветут красивые цветы."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "海",
+    "romaji": "Umi",
+    "en_meaning": "Sea / Ocean",
+    "ru_meaning": "Море",
+    "example": {
+      "jp": "夏休みに海へ行きました。",
+      "romaji": "Natsuyasumi ni umi e ikimashita.",
+      "en": "I went to the sea during summer vacation.",
+      "ru": "Я ездил на море во время летних каникул."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "音楽",
+    "romaji": "Ongaku",
+    "en_meaning": "Music",
+    "ru_meaning": "Музыка",
+    "example": {
+      "jp": "音楽を聴くのが好きです。",
+      "romaji": "Ongaku o kiku no ga suki desu.",
+      "en": "I like listening to music.",
+      "ru": "Мне нравится слушать музыку."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "電車",
+    "romaji": "Densha",
+    "en_meaning": "Train",
+    "ru_meaning": "Поезд",
+    "example": {
+      "jp": "電車で会社に行きます。",
+      "romaji": "Densha de kaisha ni ikimasu.",
+      "en": "I go to the company by train.",
+      "ru": "Я еду в компанию на поезде."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "夢",
+    "romaji": "Yume",
+    "en_meaning": "Dream",
+    "ru_meaning": "Мечта / Сон",
+    "example": {
+      "jp": "私の夢は医者になることです。",
+      "romaji": "Watashi no yume wa isha ni naru koto desu.",
+      "en": "My dream is to become a doctor.",
+      "ru": "Моя мечта — стать врачом."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "新しい",
+    "romaji": "Atarashii",
+    "en_meaning": "New",
+    "ru_meaning": "Новый",
+    "example": {
+      "jp": "新しい車を買いました。",
+      "romaji": "Atarashii kuruma o kaimashita.",
+      "en": "I bought a new car.",
+      "ru": "Я купил новую машину."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "古い",
+    "romaji": "Furui",
+    "en_meaning": "Old",
+    "ru_meaning": "Старый",
+    "example": {
+      "jp": "これは古い建物です。",
+      "romaji": "Kore wa furui tatemono desu.",
+      "en": "This is an old building.",
+      "ru": "Это старое здание."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "暑い",
+    "romaji": "Atsui",
+    "en_meaning": "Hot (weather)",
+    "ru_meaning": "Жаркий",
+    "example": {
+      "jp": "今日はとても暑いですね。",
+      "romaji": "Kyou wa totemo atsui desu ne.",
+      "en": "It's very hot today, isn't it?",
+      "ru": "Сегодня очень жарко, не так ли?"
+    },
+    "level": "N5"
+  },
+  {
+    "word": "寒い",
+    "romaji": "Samui",
+    "en_meaning": "Cold (weather)",
+    "ru_meaning": "Холодный",
+    "example": {
+      "jp": "冬はとても寒いです。",
+      "romaji": "Fuyu wa totemo samui desu.",
+      "en": "Winter is very cold.",
+      "ru": "Зимой очень холодно."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "静か",
+    "romaji": "Shizuka",
+    "en_meaning": "Quiet",
+    "ru_meaning": "Тихий",
+    "example": {
+      "jp": "図書館はとても静かです。",
+      "romaji": "Toshokan wa totemo shizuka desu.",
+      "en": "The library is very quiet.",
+      "ru": "В библиотеке очень тихо."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "走る",
+    "romaji": "Hashiru",
+    "en_meaning": "To run",
+    "ru_meaning": "Бежать",
+    "example": {
+      "jp": "公園を走っています。",
+      "romaji": "Kouen o hashitte imasu.",
+      "en": "I am running in the park.",
+      "ru": "Я бегаю в парке."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "書く",
+    "romaji": "Kaku",
+    "en_meaning": "To write",
+    "ru_meaning": "Писать",
+    "example": {
+      "jp": "手紙を書いています。",
+      "romaji": "Tegami o kaite imasu.",
+      "en": "I am writing a letter.",
+      "ru": "Я пишу письмо."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "読む",
+    "romaji": "Yomu",
+    "en_meaning": "To read",
+    "ru_meaning": "Читать",
+    "example": {
+      "jp": "新聞を読みます。",
+      "romaji": "Shinbun o yomimasu.",
+      "en": "I read the newspaper.",
+      "ru": "Я читаю газету."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "話す",
+    "romaji": "Hanasu",
+    "en_meaning": "To speak / talk",
+    "ru_meaning": "Говорить",
+    "example": {
+      "jp": "日本語で話しましょう。",
+      "romaji": "Nihongo de hanashimashou.",
+      "en": "Let's speak in Japanese.",
+      "ru": "Давайте говорить по-японски."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "待つ",
+    "romaji": "Matsu",
+    "en_meaning": "To wait",
+    "ru_meaning": "Ждать",
+    "example": {
+      "jp": "ちょっと待ってください。",
+      "romaji": "Chotto matte kudasai.",
+      "en": "Please wait a moment.",
+      "ru": "Подождите немного, пожалуйста."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "名前",
+    "romaji": "Namae",
+    "en_meaning": "Name",
+    "ru_meaning": "Имя",
+    "example": {
+      "jp": "お名前は何ですか？",
+      "romaji": "Onamae wa nan desu ka?",
+      "en": "What is your name?",
+      "ru": "Как вас зовут?"
+    },
+    "level": "N5"
+  },
+  {
+    "word": "道",
+    "romaji": "Michi",
+    "en_meaning": "Road / Path",
+    "ru_meaning": "Дорога",
+    "example": {
+      "jp": "この道は狭いです。",
+      "romaji": "Kono michi wa semai desu.",
+      "en": "This road is narrow.",
+      "ru": "Эта дорога узкая."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "朝",
+    "romaji": "Asa",
+    "en_meaning": "Morning",
+    "ru_meaning": "Утро",
+    "example": {
+      "jp": "朝六時に起きます。",
+      "romaji": "Asa rokuji ni okimasu.",
+      "en": "I wake up at 6 AM.",
+      "ru": "Я встаю в шесть утра."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "夜",
+    "romaji": "Yoru",
+    "en_meaning": "Night",
+    "ru_meaning": "Ночь",
+    "example": {
+      "jp": "夜は星が綺麗です。",
+      "romaji": "Yoru wa hoshi ga kirei desu.",
+      "en": "The stars are beautiful at night.",
+      "ru": "Ночью звезды красивые."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "電話",
+    "romaji": "Denwa",
+    "en_meaning": "Telephone / Call",
+    "ru_meaning": "Телефон",
+    "example": {
+      "jp": "友達に電話をかけました。",
+      "romaji": "Tomodachi ni denwa o kakemashita.",
+      "en": "I made a phone call to my friend.",
+      "ru": "Я позвонил другу по телефону."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "買い物",
+    "romaji": "Kaimono",
+    "en_meaning": "Shopping",
+    "ru_meaning": "Покупки",
+    "example": {
+      "jp": "デパートへ買い物に行きます。",
+      "romaji": "Depaato e kaimono ni ikimasu.",
+      "en": "I am going shopping at the department store.",
+      "ru": "Я иду в универмаг за покупками."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "体",
+    "romaji": "Karada",
+    "en_meaning": "Body / Health",
+    "ru_meaning": "Тело / Здоровье",
+    "example": {
+      "jp": "体にいい食べ物を食べましょう。",
+      "romaji": "Karada ni ii tabemono o tabemashou.",
+      "en": "Let's eat food that is good for the body.",
+      "ru": "Давайте есть еду, полезную для здоровья."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "心",
+    "romaji": "Kokoro",
+    "en_meaning": "Heart / Soul",
+    "ru_meaning": "Сердце / Душа",
+    "example": {
+      "jp": "彼は心が優しい人です。",
+      "romaji": "Kare wa kokoro ga yasashii hito desu.",
+      "en": "He is a kind-hearted person.",
+      "ru": "Он человек с добрым сердцем."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "太陽",
+    "romaji": "Taiyou",
+    "en_meaning": "Sun",
+    "ru_meaning": "Солнце",
+    "example": {
+      "jp": "太陽が昇っています。",
+      "romaji": "Taiyou ga nobotte imasu.",
+      "en": "The sun is rising.",
+      "ru": "Солнце встает."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "月",
+    "romaji": "Tsuki",
+    "en_meaning": "Moon / Month",
+    "ru_meaning": "Луна / Месяц",
+    "example": {
+      "jp": "今夜は月がとても綺麗です。",
+      "romaji": "Konya wa tsuki ga totemo kirei desu.",
+      "en": "The moon is very beautiful tonight.",
+      "ru": "Сегодня ночью луна очень красивая."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "風",
+    "romaji": "Kaze",
+    "en_meaning": "Wind",
+    "ru_meaning": "Ветер",
+    "example": {
+      "jp": "強い風が吹いています。",
+      "romaji": "Tsuyoi kaze ga fuite imasu.",
+      "en": "A strong wind is blowing.",
+      "ru": "Дует сильный ветер."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "山",
+    "romaji": "Yama",
+    "en_meaning": "Mountain",
+    "ru_meaning": "Гора",
+    "example": {
+      "jp": "富士山は高い山です。",
+      "romaji": "Fujisan wa takai yama desu.",
+      "en": "Mount Fuji is a tall mountain.",
+      "ru": "Фудзи — высокая гора."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "川",
+    "romaji": "Kawa",
+    "en_meaning": "River",
+    "ru_meaning": "Река",
+    "example": {
+      "jp": "川で魚を釣りました。",
+      "romaji": "Kawa de sakana o tsurimashita.",
+      "en": "I caught a fish in the river.",
+      "ru": "Я поймал рыбу в реке."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "歩く",
+    "romaji": "Aruku",
+    "en_meaning": "To walk",
+    "ru_meaning": "Идти пешком",
+    "example": {
+      "jp": "駅まで歩きましょう。",
+      "romaji": "Eki made arukimashou.",
+      "en": "Let's walk to the station.",
+      "ru": "Давайте пойдем к станции пешком."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "見る",
+    "romaji": "Miru",
+    "en_meaning": "To see / watch",
+    "ru_meaning": "Смотреть",
+    "example": {
+      "jp": "テレビを見てもいいですか？",
+      "romaji": "Terebi o mite mo ii desu ka?",
+      "en": "May I watch television?",
+      "ru": "Можно мне посмотреть телевизор?"
+    },
+    "level": "N5"
+  },
+  {
+    "word": "聞く",
+    "romaji": "Kiku",
+    "en_meaning": "To listen / ask",
+    "ru_meaning": "Слушать / Спрашивать",
+    "example": {
+      "jp": "ラジオを聞いています。",
+      "romaji": "Rajio o kiite imasu.",
+      "en": "I am listening to the radio.",
+      "ru": "Я слушаю радио."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "行く",
+    "romaji": "Iku",
+    "en_meaning": "To go",
+    "ru_meaning": "Идти / Ехать",
+    "example": {
+      "jp": "明日、東京へ行きます。",
+      "romaji": "Ashita, Toukyou e ikimasu.",
+      "en": "I am going to Tokyo tomorrow.",
+      "ru": "Завтра я поеду в Токио."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "来る",
+    "romaji": "Kuru",
+    "en_meaning": "To come",
+    "ru_meaning": "Приходить",
+    "example": {
+      "jp": "友達が遊びに来ました。",
+      "romaji": "Tomodachi ga asobi ni kimashita.",
+      "en": "A friend came over to hang out.",
+      "ru": "Пришел друг в гости."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "忙しい",
+    "romaji": "Isogashii",
+    "en_meaning": "Busy",
+    "ru_meaning": "Занятой",
+    "example": {
+      "jp": "今週はとても忙しいです。",
+      "romaji": "Konshuu wa totemo isogashii desu.",
+      "en": "I am very busy this week.",
+      "ru": "На этой неделе я очень занят."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "暇",
+    "romaji": "Hima",
+    "en_meaning": "Free time / Not busy",
+    "ru_meaning": "Свободный",
+    "example": {
+      "jp": "明日は暇ですか？",
+      "romaji": "Ashita wa hima desu ka?",
+      "en": "Are you free tomorrow?",
+      "ru": "Ты свободен завтра?"
+    },
+    "level": "N5"
+  },
+  {
+    "word": "嬉しい",
+    "romaji": "Ureshii",
+    "en_meaning": "Happy / Glad",
+    "ru_meaning": "Радостный",
+    "example": {
+      "jp": "プレゼントをもらって嬉しいです。",
+      "romaji": "Purezento o moratte ureshii desu.",
+      "en": "I am happy to receive a gift.",
+      "ru": "Я рад получить подарок."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "悲しい",
+    "romaji": "Kanashii",
+    "en_meaning": "Sad",
+    "ru_meaning": "Грустный",
+    "example": {
+      "jp": "悲しい映画を見て泣きました。",
+      "romaji": "Kanashii eiga o mite nakimashita.",
+      "en": "I watched a sad movie and cried.",
+      "ru": "Я посмотрел грустный фильм и заплакал."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "面白い",
+    "romaji": "Omoshiroi",
+    "en_meaning": "Interesting / Funny",
+    "ru_meaning": "Интересный / Смешной",
+    "example": {
+      "jp": "この漫画はとても面白いです。",
+      "romaji": "Kono manga wa totemo omoshiroi desu.",
+      "en": "This manga is very interesting.",
+      "ru": "Эта манга очень интересная."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "車",
+    "romaji": "Kuruma",
+    "en_meaning": "Car",
+    "ru_meaning": "Машина",
+    "example": {
+      "jp": "車を運転できますか？",
+      "romaji": "Kuruma o unten dekimasu ka?",
+      "en": "Can you drive a car?",
+      "ru": "Ты умеешь водить машину?"
+    },
+    "level": "N5"
+  },
+  {
+    "word": "薬",
+    "romaji": "Kusuri",
+    "en_meaning": "Medicine",
+    "ru_meaning": "Лекарство",
+    "example": {
+      "jp": "食後に薬を飲んでください。",
+      "romaji": "Shokugo ni kusuri o nonde kudasai.",
+      "en": "Please take medicine after meals.",
+      "ru": "Пожалуйста, примите лекарство после еды."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "病院",
+    "romaji": "Byouin",
+    "en_meaning": "Hospital",
+    "ru_meaning": "Больница",
+    "example": {
+      "jp": "風邪をひいたので病院へ行きます。",
+      "romaji": "Kaze o hiita node byouin e ikimasu.",
+      "en": "I caught a cold, so I'm going to the hospital.",
+      "ru": "Я простудился, поэтому иду в больницу."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "体調",
+    "romaji": "Taichou",
+    "en_meaning": "Physical condition",
+    "ru_meaning": "Состояние здоровья",
+    "example": {
+      "jp": "体調が良くないです。",
+      "romaji": "Taichou ga yokunai desu.",
+      "en": "I'm not feeling well.",
+      "ru": "Я плохо себя чувствую."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "手",
+    "romaji": "Te",
+    "en_meaning": "Hand",
+    "ru_meaning": "Рука",
+    "example": {
+      "jp": "食べる前に手を洗いましょう。",
+      "romaji": "Taberu mae ni te o araimashou.",
+      "en": "Let's wash hands before eating.",
+      "ru": "Давайте помоем руки перед едой."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "足",
+    "romaji": "Ashi",
+    "en_meaning": "Leg / Foot",
+    "ru_meaning": "Нога",
+    "example": {
+      "jp": "たくさん歩いたので足が痛いです。",
+      "romaji": "Takusan aruita node ashi ga itai desu.",
+      "en": "My legs hurt because I walked a lot.",
+      "ru": "У меня болят ноги, потому что я много ходил."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "目",
+    "romaji": "Me",
+    "en_meaning": "Eye",
+    "ru_meaning": "Глаз",
+    "example": {
+      "jp": "目が疲れました。",
+      "romaji": "Me ga tsukaremashita.",
+      "en": "My eyes are tired.",
+      "ru": "Глаза устали."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "耳",
+    "romaji": "Mimi",
+    "en_meaning": "Ear",
+    "ru_meaning": "Ухо",
+    "example": {
+      "jp": "耳が遠いです。",
+      "romaji": "Mimi ga tooi desu.",
+      "en": "Hard of hearing.",
+      "ru": "Плохо слышит."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "口",
+    "romaji": "Kuchi",
+    "en_meaning": "Mouth",
+    "ru_meaning": "Рот",
+    "example": {
+      "jp": "大きな口を開けてください。",
+      "romaji": "Ookina kuchi o akete kudasai.",
+      "en": "Please open your mouth wide.",
+      "ru": "Пожалуйста, открой рот широко."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "部屋",
+    "romaji": "Heya",
+    "en_meaning": "Room",
+    "ru_meaning": "Комната",
+    "example": {
+      "jp": "私の部屋は二階にあります。",
+      "romaji": "Watashi no heya wa nikai ni arimasu.",
+      "en": "My room is on the second floor.",
+      "ru": "Моя комната на втором этаже."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "机",
+    "romaji": "Tsukue",
+    "en_meaning": "Desk",
+    "ru_meaning": "Стол (письменный)",
+    "example": {
+      "jp": "机の上に本があります。",
+      "romaji": "Tsukue no ue ni hon ga arimasu.",
+      "en": "There is a book on the desk.",
+      "ru": "На столе лежит книга."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "椅子",
+    "romaji": "Isu",
+    "en_meaning": "Chair",
+    "ru_meaning": "Стул",
+    "example": {
+      "jp": "椅子に座ってください。",
+      "romaji": "Isu ni swatte kudasai.",
+      "en": "Please sit on the chair.",
+      "ru": "Садитесь на стул, пожалуйста."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "時計",
+    "romaji": "Tokei",
+    "en_meaning": "Clock / Watch",
+    "ru_meaning": "Часы",
+    "example": {
+      "jp": "新しい時計を買いました。",
+      "romaji": "Atarashii tokei o kaimashita.",
+      "en": "I bought a new watch.",
+      "ru": "Я купил новые часы."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "窓",
+    "romaji": "Mado",
+    "en_meaning": "Window",
+    "ru_meaning": "Окно",
+    "example": {
+      "jp": "窓を閉めてください。",
+      "romaji": "Mado o shimete kudasai.",
+      "en": "Please close the window.",
+      "ru": "Пожалуйста, закрой окно."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "鍵",
+    "romaji": "Kagi",
+    "en_meaning": "Key",
+    "ru_meaning": "Ключ",
+    "example": {
+      "jp": "鍵をなくしてしまいました。",
+      "romaji": "Kagi o nakushite shimaimashita.",
+      "en": "I lost my keys.",
+      "ru": "Я потерял ключи."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "食べる",
+    "romaji": "Taberu",
+    "en_meaning": "To eat",
+    "ru_meaning": "Есть / Кушать",
+    "example": {
+      "jp": "りんごを食べます。",
+      "romaji": "Ringo o tabemasu.",
+      "en": "I eat an apple.",
+      "ru": "Я ем яблоко."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "飲む",
+    "romaji": "Nomu",
+    "en_meaning": "To drink",
+    "ru_meaning": "Пить",
+    "example": {
+      "jp": "お茶を飲みますか？",
+      "romaji": "Ocha o nomimasu ka?",
+      "en": "Will you drink some tea?",
+      "ru": "Будешь пить чай?"
+    },
+    "level": "N5"
+  },
+  {
+    "word": "大きい",
+    "romaji": "Ookii",
+    "en_meaning": "Big",
+    "ru_meaning": "Большой",
+    "example": {
+      "jp": "大きな家ですね。",
+      "romaji": "Ookina ie desu ne.",
+      "en": "It's a big house, isn't it?",
+      "ru": "Большой дом, не так ли?"
+    },
+    "level": "N5"
+  },
+  {
+    "word": "小さい",
+    "romaji": "Chiisai",
+    "en_meaning": "Small",
+    "ru_meaning": "Маленький",
+    "example": {
+      "jp": "小さい猫がいます。",
+      "romaji": "Chiisai neko ga imasu.",
+      "en": "There is a small cat.",
+      "ru": "Там маленькая кошка."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "今日",
+    "romaji": "Kyou",
+    "en_meaning": "Today",
+    "ru_meaning": "Сегодня",
+    "example": {
+      "jp": "今日はいい天気です。",
+      "romaji": "Kyou wa ii tenki desu.",
+      "en": "The weather is nice today.",
+      "ru": "Сегодня хорошая погода."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "明日",
+    "romaji": "Ashita",
+    "en_meaning": "Tomorrow",
+    "ru_meaning": "Завтра",
+    "example": {
+      "jp": "明日は休みです。",
+      "romaji": "Ashita wa yasumi desu.",
+      "en": "Tomorrow is a day off.",
+      "ru": "Завтра выходной."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "昨日",
+    "romaji": "Kinou",
+    "en_meaning": "Yesterday",
+    "ru_meaning": "Вчера",
+    "example": {
+      "jp": "昨日は雨でした。",
+      "romaji": "Kinou wa ame deshita.",
+      "en": "It was raining yesterday.",
+      "ru": "Вчера был дождь."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "買い物",
+    "romaji": "Kaimono",
+    "en_meaning": "Shopping",
+    "ru_meaning": "Покупки",
+    "example": {
+      "jp": "デパートへ買い物に行きます。",
+      "romaji": "Depaato e kaimono ni ikimasu.",
+      "en": "I go shopping at the department store.",
+      "ru": "Я иду в универмаг за покупками."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "駅",
+    "romaji": "Eki",
+    "en_meaning": "Station",
+    "ru_meaning": "Станция / Вокзал",
+    "example": {
+      "jp": "駅はどこですか？",
+      "romaji": "Eki wa doko desu ka?",
+      "en": "Where is the station?",
+      "ru": "Где находится станция?"
+    },
+    "level": "N5"
+  },
+  {
+    "word": "日本語",
+    "romaji": "Nihongo",
+    "en_meaning": "Japanese language",
+    "ru_meaning": "Японский язык",
+    "example": {
+      "jp": "日本語が上手ですね。",
+      "romaji": "Nihongo ga jouzu desu ne.",
+      "en": "Your Japanese is good.",
+      "ru": "Твой японский хорош."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "難しい",
+    "romaji": "Muzukashii",
+    "en_meaning": "Difficult",
+    "ru_meaning": "Трудный / Сложный",
+    "example": {
+      "jp": "漢字は難しいです。",
+      "romaji": "Kanji wa muzukashii desu.",
+      "en": "Kanji is difficult.",
+      "ru": "Кандзи — это сложно."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "易しい",
+    "romaji": "Yasashii",
+    "en_meaning": "Easy",
+    "ru_meaning": "Простой / Легкий",
+    "example": {
+      "jp": "このテストは易しかったです。",
+      "romaji": "Kono tesuto wa yasashikatta desu.",
+      "en": "This test was easy.",
+      "ru": "Этот тест был легким."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "元気",
+    "romaji": "Genki",
+    "en_meaning": "Healthy / Energetic",
+    "ru_meaning": "Здоровый / Бодрый",
+    "example": {
+      "jp": "お元気ですか？",
+      "romaji": "O-genki desu ka?",
+      "en": "How are you (Are you healthy)?",
+      "ru": "Как дела? (Вы здоровы?)"
+    },
+    "level": "N5"
+  },
+  {
+    "word": "名前",
+    "romaji": "Namae",
+    "en_meaning": "Name",
+    "ru_meaning": "Имя",
+    "example": {
+      "jp": "お名前を教えてください。",
+      "romaji": "Onamae o oshiete kudasai.",
+      "en": "Please tell me your name.",
+      "ru": "Пожалуйста, скажите ваше имя."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "書く",
+    "romaji": "Kaku",
+    "en_meaning": "To write",
+    "ru_meaning": "Писать",
+    "example": {
+      "jp": "ペンで名前を書きます。",
+      "romaji": "Pen de namae o kakimasu.",
+      "en": "I write my name with a pen.",
+      "ru": "Я пишу имя ручкой."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "犬",
+    "romaji": "Inu",
+    "en_meaning": "Dog",
+    "ru_meaning": "Собака",
+    "example": {
+      "jp": "白い犬が好きです。",
+      "romaji": "Shiroi inu ga suki desu.",
+      "en": "I like white dogs.",
+      "ru": "Мне нравятся белые собаки."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "高い",
+    "romaji": "Takai",
+    "en_meaning": "Expensive / Tall",
+    "ru_meaning": "Дорогой / Высокий",
+    "example": {
+      "jp": "この時計は高いです。",
+      "romaji": "Kono tokei wa takai desu.",
+      "en": "This watch is expensive.",
+      "ru": "Эти часы дорогие."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "安い",
+    "romaji": "Yasui",
+    "en_meaning": "Cheap",
+    "ru_meaning": "Дешевый",
+    "example": {
+      "jp": "安いスーパーで買いました。",
+      "romaji": "Yasui suupaa de kaimashita.",
+      "en": "I bought it at a cheap supermarket.",
+      "ru": "Я купил это в дешевом супермаркете."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "使う",
+    "romaji": "Tsukau",
+    "en_meaning": "To use",
+    "ru_meaning": "Использовать",
+    "example": {
+      "jp": "このペンを使ってもいいですか？",
+      "romaji": "Kono pen o tsukatte mo ii desu ka?",
+      "en": "May I use this pen?",
+      "ru": "Можно мне воспользоваться этой ручкой?"
+    },
+    "level": "N5"
+  },
+  {
+    "word": "会う",
+    "romaji": "Au",
+    "en_meaning": "To meet",
+    "ru_meaning": "Встречаться",
+    "example": {
+      "jp": "明日、友達に会います。",
+      "romaji": "Ashita, tomodachi ni aimasu.",
+      "en": "I will meet a friend tomorrow.",
+      "ru": "Завтра я встречусь с другом."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "言う",
+    "romaji": "Iu",
+    "en_meaning": "To say",
+    "ru_meaning": "Говорить / Сказать",
+    "example": {
+      "jp": "何と言いましたか？",
+      "romaji": "Nan to iimashita ka?",
+      "en": "What did you say?",
+      "ru": "Что вы сказали?"
+    },
+    "level": "N5"
+  },
+  {
+    "word": "起きる",
+    "romaji": "Okiru",
+    "en_meaning": "To wake up / Get up",
+    "ru_meaning": "Просыпаться / Вставать",
+    "example": {
+      "jp": "毎朝六時に起きます。",
+      "romaji": "Maiasa rokuji ni okimasu.",
+      "en": "I get up at 6 every morning.",
+      "ru": "Я встаю каждое утро в 6 часов."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "空港",
+    "romaji": "Kuukou",
+    "en_meaning": "Airport",
+    "ru_meaning": "Аэропорт",
+    "example": {
+      "jp": "空港までタクシーで行きます。",
+      "romaji": "Kuukou made takushii de ikimasu.",
+      "en": "I'm going to the airport by taxi.",
+      "ru": "Я еду в аэропорт на такси."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "地図",
+    "romaji": "Chizu",
+    "en_meaning": "Map",
+    "ru_meaning": "Карта",
+    "example": {
+      "jp": "地図を見せてください。",
+      "romaji": "Chizu o misete kudasai.",
+      "en": "Please show me the map.",
+      "ru": "Пожалуйста, покажите мне карту."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "準備",
+    "romaji": "Junbi",
+    "en_meaning": "Preparation",
+    "ru_meaning": "Подготовка",
+    "example": {
+      "jp": "旅行の準備ができました。",
+      "romaji": "Ryokou no junbi ga dekimashita.",
+      "en": "The preparations for the trip are done.",
+      "ru": "Подготовка к путешествию завершена."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "秘密",
+    "romaji": "Himitsu",
+    "en_meaning": "Secret",
+    "ru_meaning": "Секрет",
+    "example": {
+      "jp": "これは二人の秘密です。",
+      "romaji": "Kore wa futari no himitsu desu.",
+      "en": "This is a secret between the two of us.",
+      "ru": "Это секрет между нами двумя."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "財布",
+    "romaji": "Saifu",
+    "en_meaning": "Wallet",
+    "ru_meaning": "Кошелек",
+    "example": {
+      "jp": "財布を忘れました。",
+      "romaji": "Saifu o wasuremashita.",
+      "en": "I forgot my wallet.",
+      "ru": "Я забыл свой кошелек."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "予約",
+    "romaji": "Yoyaku",
+    "en_meaning": "Reservation / Appointment",
+    "ru_meaning": "Бронь / Запись",
+    "example": {
+      "jp": "レストランを予約しました。",
+      "romaji": "Resutoran o yoyaku shimashita.",
+      "en": "I made a reservation at the restaurant.",
+      "ru": "Я забронировал столик в ресторане."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "心配",
+    "romaji": "Shinpai",
+    "en_meaning": "Worry / Anxiety",
+    "ru_meaning": "Беспокойство",
+    "example": {
+      "jp": "心配しないでください。",
+      "romaji": "Shinpai shinaide kudasai.",
+      "en": "Please don't worry.",
+      "ru": "Пожалуйста, не беспокойтесь."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "理由",
+    "romaji": "Riyuu",
+    "en_meaning": "Reason",
+    "ru_meaning": "Причина",
+    "example": {
+      "jp": "理由を教えてください。",
+      "romaji": "Riyuu o oshiete kudasai.",
+      "en": "Please tell me the reason.",
+      "ru": "Пожалуйста, назовите причину."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "台所",
+    "romaji": "Daidokoro",
+    "en_meaning": "Kitchen",
+    "ru_meaning": "Кухня",
+    "example": {
+      "jp": "台所で晩御飯を作っています。",
+      "romaji": "Daidokoro de bangohan o tsukutte imasu.",
+      "en": "I'm making dinner in the kitchen.",
+      "ru": "Я готовлю ужин на кухне."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "道具",
+    "romaji": "Dougu",
+    "en_meaning": "Tool / Equipment",
+    "ru_meaning": "Инструмент",
+    "example": {
+      "jp": "掃除の道具はどこですか？",
+      "romaji": "Souji no dougu wa doko desu ka?",
+      "en": "Where are the cleaning tools?",
+      "ru": "Где инструменты для уборки?"
+    },
+    "level": "N5"
+  },
+  {
+    "word": "将来",
+    "romaji": "Shourai",
+    "en_meaning": "Future",
+    "ru_meaning": "Будущее",
+    "example": {
+      "jp": "将来は日本に住みたいです。",
+      "romaji": "Shourai wa Nihon ni sumitai desu.",
+      "en": "I want to live in Japan in the future.",
+      "ru": "В будущем я хочу жить в Японии."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "文化",
+    "romaji": "Bunka",
+    "en_meaning": "Culture",
+    "ru_meaning": "Культура",
+    "example": {
+      "jp": "日本の文化に興味があります。",
+      "romaji": "Nihon no bunka ni kyoumi ga arimasu.",
+      "en": "I'm interested in Japanese culture.",
+      "ru": "Я интересуюсь японской культурой."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "火事",
+    "romaji": "Kaji",
+    "en_meaning": "Fire (disaster)",
+    "ru_meaning": "Пожар",
+    "example": {
+      "jp": "火事に気をつけてください。",
+      "romaji": "Kaji ni ki o tsukete kudasai.",
+      "en": "Please be careful of fires.",
+      "ru": "Пожалуйста, будьте осторожны с огнем."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "地震",
+    "romaji": "Jishin",
+    "en_meaning": "Earthquake",
+    "ru_meaning": "Землетрясение",
+    "example": {
+      "jp": "日本は地震が多いです。",
+      "romaji": "Nihon wa jishin ga ooi desu.",
+      "en": "There are many earthquakes in Japan.",
+      "ru": "В Японии часто случаются землетрясения."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "関係",
+    "romaji": "Kankei",
+    "en_meaning": "Relationship / Connection",
+    "ru_meaning": "Отношение / Связь",
+    "example": {
+      "jp": "彼との関係は良好です。",
+      "romaji": "Kare to no kankei wa ryoukou desu.",
+      "en": "The relationship with him is good.",
+      "ru": "Отношения с ним хорошие."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "洗濯",
+    "romaji": "Sentaku",
+    "en_meaning": "Laundry / Washing",
+    "ru_meaning": "Стирка",
+    "example": {
+      "jp": "今日は洗濯をします。",
+      "romaji": "Kyou wa sentaku o shimasu.",
+      "en": "I will do the laundry today.",
+      "ru": "Сегодня я займусь стиркой."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "掃除",
+    "romaji": "Souji",
+    "en_meaning": "Cleaning",
+    "ru_meaning": "Уборка",
+    "example": {
+      "jp": "部屋の掃除をしましょう。",
+      "romaji": "Heya no souji o shimashou.",
+      "en": "Let's clean the room.",
+      "ru": "Давай уберемся в комнате."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "結婚",
+    "romaji": "Kekkon",
+    "en_meaning": "Marriage",
+    "ru_meaning": "Свадьба / Женитьба",
+    "example": {
+      "jp": "来年、結婚します。",
+      "romaji": "Rainen, kekkon shimasu.",
+      "en": "I will get married next year.",
+      "ru": "Я женюсь в следующем году."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "反対",
+    "romaji": "Hantai",
+    "en_meaning": "Opposition / Opposite",
+    "ru_meaning": "Возражение / Противоположность",
+    "example": {
+      "jp": "彼の意見に反対です。",
+      "romaji": "Kare no iken ni hantai desu.",
+      "en": "I oppose his opinion.",
+      "ru": "Я против его мнения."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "賛成",
+    "romaji": "Sansei",
+    "en_meaning": "Agreement",
+    "ru_meaning": "Согласие / Одобрение",
+    "example": {
+      "jp": "その計画に賛成します。",
+      "romaji": "Sono keikaku ni sansei shimasu.",
+      "en": "I agree with that plan.",
+      "ru": "Я согласен с этим планом."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "信号",
+    "romaji": "Singou",
+    "en_meaning": "Traffic light",
+    "ru_meaning": "Светофор",
+    "example": {
+      "jp": "信号が赤になりました。",
+      "romaji": "Singou ga aka ni narimashita.",
+      "en": "The traffic light turned red.",
+      "ru": "Светофор стал красным."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "危険",
+    "romaji": "Kiken",
+    "en_meaning": "Danger",
+    "ru_meaning": "Опасность",
+    "example": {
+      "jp": "ここは危険です。",
+      "romaji": "Koko wa kiken desu.",
+      "en": "It is dangerous here.",
+      "ru": "Здесь опасно."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "安全",
+    "romaji": "Anzen",
+    "en_meaning": "Safety",
+    "ru_meaning": "Безопасность",
+    "example": {
+      "jp": "安全を確認してください。",
+      "romaji": "Anzen o kakunin shite kudasai.",
+      "en": "Please confirm the safety.",
+      "ru": "Пожалуйста, проверьте безопасность."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "故障",
+    "romaji": "Koshou",
+    "en_meaning": "Breakdown / Failure",
+    "ru_meaning": "Поломка / Неисправность",
+    "example": {
+      "jp": "パソコンが故障しました。",
+      "romaji": "Pasokon ga koshou shimashita.",
+      "en": "The computer broke down.",
+      "ru": "Компьютер сломался."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "修理",
+    "romaji": "Shuuri",
+    "en_meaning": "Repair",
+    "ru_meaning": "Ремонт",
+    "example": {
+      "jp": "時計の修理をお願いします。",
+      "romaji": "Tokei no shuuri o onegai shimasu.",
+      "en": "Please repair the watch.",
+      "ru": "Пожалуйста, отремонтируйте часы."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "成功",
+    "romaji": "Seikou",
+    "en_meaning": "Success",
+    "ru_meaning": "Успех",
+    "example": {
+      "jp": "仕事が成功しました。",
+      "romaji": "Shigoto ga seikou shimashita.",
+      "en": "The job was a success.",
+      "ru": "Работа прошла успешно."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "失敗",
+    "romaji": "Shippai",
+    "en_meaning": "Failure / Mistake",
+    "ru_meaning": "Провал / Ошибка",
+    "example": {
+      "jp": "失敗を恐れないでください。",
+      "romaji": "Shippai o osorenaide kudasai.",
+      "en": "Don't be afraid of failure.",
+      "ru": "Не бойся неудач."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "経験",
+    "romaji": "Keiken",
+    "en_meaning": "Experience",
+    "ru_meaning": "Опыт",
+    "example": {
+      "jp": "良い経験になりました。",
+      "romaji": "Yoi keiken ni narimashita.",
+      "en": "It was a good experience.",
+      "ru": "Это был хороший опыт."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "技術",
+    "romaji": "Gijutsu",
+    "en_meaning": "Technology / Skill",
+    "ru_meaning": "Технология / Навык",
+    "example": {
+      "jp": "日本の技術はすごいです。",
+      "romaji": "Nihon no gijutsu wa sugoi desu.",
+      "en": "Japanese technology is amazing.",
+      "ru": "Японские технологии поразительны."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "平和",
+    "romaji": "Heiwa",
+    "en_meaning": "Peace",
+    "ru_meaning": "Мир (спокойствие)",
+    "example": {
+      "jp": "世界が平和になりますように。",
+      "romaji": "Sekai ga heiwa ni narimasu you ni.",
+      "en": "I hope the world becomes peaceful.",
+      "ru": "Пусть во всем мире наступит мир."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "季節",
+    "romaji": "Kisetsu",
+    "en_meaning": "Season",
+    "ru_meaning": "Сезон / Время года",
+    "example": {
+      "jp": "どの季節が一番好きですか？",
+      "romaji": "Dono kisetsu ga ichiban suki desu ka?",
+      "en": "Which season do you like best?",
+      "ru": "Какое время года тебе нравится больше всего?"
+    },
+    "level": "N5"
+  },
+  {
+    "word": "習慣",
+    "romaji": "Shuukan",
+    "en_meaning": "Habit / Custom",
+    "ru_meaning": "Привычка / Обычай",
+    "example": {
+      "jp": "早起きは良い習慣です。",
+      "romaji": "Hayaoki wa yoi shuukan desu.",
+      "en": "Waking up early is a good habit.",
+      "ru": "Рано вставать — хорошая привычка."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "政府",
+    "romaji": "Seifu",
+    "en_meaning": "Government",
+    "ru_meaning": "Правительство",
+    "example": {
+      "jp": "政府の新しい方針です。",
+      "romaji": "Seifu no atarashii houshin desu.",
+      "en": "This is the government's new policy.",
+      "ru": "Это новая политика правительства."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "社会",
+    "romaji": "Shakai",
+    "en_meaning": "Society",
+    "ru_meaning": "Общество",
+    "example": {
+      "jp": "社会のルールを守りましょう。",
+      "romaji": "Shakai no ruuru o mamorimashou.",
+      "en": "Let's follow the rules of society.",
+      "ru": "Давайте соблюдать правила общества."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "法律",
+    "romaji": "Houritsu",
+    "en_meaning": "Law",
+    "ru_meaning": "Закон",
+    "example": {
+      "jp": "法律を勉強しています。",
+      "romaji": "Houritsu o benkyou shite imasu.",
+      "en": "I am studying law.",
+      "ru": "Я изучаю право."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "自由",
+    "romaji": "Jiyuu",
+    "en_meaning": "Freedom",
+    "ru_meaning": "Свобода",
+    "example": {
+      "jp": "自由な時間が欲しいです。",
+      "romaji": "Jiyuu na jikan ga hoshii desu.",
+      "en": "I want free time.",
+      "ru": "Я хочу немного свободного времени."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "意見",
+    "romaji": "Iken",
+    "en_meaning": "Opinion",
+    "ru_meaning": "Мнение",
+    "example": {
+      "jp": "あなたの意見を聞かせてください。",
+      "romaji": "Anata no iken o kikasete kudasai.",
+      "en": "Please let me hear your opinion.",
+      "ru": "Пожалуйста, позвольте мне услышать ваше мнение."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "目的",
+    "romaji": "Mokuteki",
+    "en_meaning": "Purpose / Goal",
+    "ru_meaning": "Цель",
+    "example": {
+      "jp": "旅の目的は何ですか？",
+      "romaji": "Tabi no mokuteki wa nan desu ka?",
+      "en": "What is the purpose of the trip?",
+      "ru": "Какова цель поездки?"
+    },
+    "level": "N5"
+  },
+  {
+    "word": "結果",
+    "romaji": "Kekka",
+    "en_meaning": "Result",
+    "ru_meaning": "Результат",
+    "example": {
+      "jp": "テストの結果が悪かったです。",
+      "romaji": "Tesuto no kekka ga warukatta desu.",
+      "en": "The test results were bad.",
+      "ru": "Результаты теста были плохими."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "解決",
+    "romaji": "Kaiketsu",
+    "en_meaning": "Solution / Settlement",
+    "ru_meaning": "Решение (проблемы)",
+    "example": {
+      "jp": "問題を解決しました。",
+      "romaji": "Mondai o kaiketsu shimashita.",
+      "en": "The problem has been solved.",
+      "ru": "Проблема решена."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "注文",
+    "romaji": "Chuumon",
+    "en_meaning": "Order",
+    "ru_meaning": "Заказ",
+    "example": {
+      "jp": "注文をお願いします。",
+      "romaji": "Chuumon o onegai shimasu.",
+      "en": "I'd like to order, please.",
+      "ru": "Я хотел бы сделать заказ."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "朝食",
+    "romaji": "Choushoku",
+    "en_meaning": "Breakfast",
+    "ru_meaning": "Завтрак",
+    "example": {
+      "jp": "朝食はパンを食べました。",
+      "romaji": "Choushoku wa pan o tabemashita.",
+      "en": "I ate bread for breakfast.",
+      "ru": "Я съел хлеб на завтрак."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "昼食",
+    "romaji": "Chuushoku",
+    "en_meaning": "Lunch",
+    "ru_meaning": "Обед",
+    "example": {
+      "jp": "一緒に昼食を食べませんか？",
+      "romaji": "Issho ni chuushoku o tabemasen ka?",
+      "en": "Would you like to have lunch together?",
+      "ru": "Не хочешь пообедать вместе?"
+    },
+    "level": "N5"
+  },
+  {
+    "word": "夕食",
+    "romaji": "Yuushoku",
+    "en_meaning": "Dinner",
+    "ru_meaning": "Ужин",
+    "example": {
+      "jp": "夕食に寿司を作りました。",
+      "romaji": "Yuushoku ni sushi o tsukurimashita.",
+      "en": "I made sushi for dinner.",
+      "ru": "Я приготовил суши на ужин."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "料理",
+    "romaji": "Ryouri",
+    "en_meaning": "Cooking / Cuisine",
+    "ru_meaning": "Кулинария / Блюдо",
+    "example": {
+      "jp": "日本料理が大好きです。",
+      "romaji": "Nihon ryouri ga daisuki desu.",
+      "en": "I love Japanese cuisine.",
+      "ru": "Я обожаю японскую кухню."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "野菜",
+    "romaji": "Yasai",
+    "en_meaning": "Vegetables",
+    "ru_meaning": "Овощи",
+    "example": {
+      "jp": "毎日野菜を食べてください。",
+      "romaji": "Mainichi yasai o tabete kudasai.",
+      "en": "Please eat vegetables every day.",
+      "ru": "Пожалуйста, ешьте овощи каждый день."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "果物",
+    "romaji": "Kudamono",
+    "en_meaning": "Fruit",
+    "ru_meaning": "Фрукты",
+    "example": {
+      "jp": "どの果物が好きですか？",
+      "romaji": "Dono kudamono ga suki desu ka?",
+      "en": "Which fruit do you like?",
+      "ru": "Какие фрукты тебе нравятся?"
+    },
+    "level": "N5"
+  },
+  {
+    "word": "牛肉",
+    "romaji": "Gyuuniku",
+    "en_meaning": "Beef",
+    "ru_meaning": "Говядина",
+    "example": {
+      "jp": "この牛肉はとても柔らかいですね。",
+      "romaji": "Kono gyuuniku wa totemo yawarakai desu ne.",
+      "en": "This beef is very tender, isn't it?",
+      "ru": "Эта говядина очень мягкая, не так ли?"
+    },
+    "level": "N5"
+  },
+  {
+    "word": "卵",
+    "romaji": "Tamago",
+    "en_meaning": "Egg",
+    "ru_meaning": "Яйцо",
+    "example": {
+      "jp": "卵を二つ買いました。",
+      "romaji": "Tamago o futatsu kaimashita.",
+      "en": "I bought two eggs.",
+      "ru": "Я купил два яйца."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "甘い",
+    "romaji": "Amai",
+    "en_meaning": "Sweet",
+    "ru_meaning": "Сладкий",
+    "example": {
+      "jp": "このケーキは甘いです。",
+      "romaji": "Kono keeki wa amai desu.",
+      "en": "This cake is sweet.",
+      "ru": "Этот торт сладкий."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "辛い",
+    "romaji": "Karai",
+    "en_meaning": "Spicy / Hot",
+    "ru_meaning": "Острый",
+    "example": {
+      "jp": "辛い料理が苦手です。",
+      "romaji": "Karai ryouri ga nigate desu.",
+      "en": "I'm not good with spicy food.",
+      "ru": "Я не очень люблю острую пищу."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "塩",
+    "romaji": "Shio",
+    "en_meaning": "Salt",
+    "ru_meaning": "Соль",
+    "example": {
+      "jp": "塩を取ってください。",
+      "romaji": "Shio o totte kudasai.",
+      "en": "Please pass the salt.",
+      "ru": "Пожалуйста, передайте соль."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "砂糖",
+    "romaji": "Satou",
+    "en_meaning": "Sugar",
+    "ru_meaning": "Сахар",
+    "example": {
+      "jp": "コーヒーに砂糖を入れますか？",
+      "romaji": "Koohii ni satou o iremasu ka?",
+      "en": "Do you put sugar in your coffee?",
+      "ru": "Ты кладешь сахар в кофе?"
+    },
+    "level": "N5"
+  },
+  {
+    "word": "お腹",
+    "romaji": "Onaka",
+    "en_meaning": "Stomach",
+    "ru_meaning": "Живот",
+    "example": {
+      "jp": "お腹が空きました。",
+      "romaji": "Onaka ga sukimashita.",
+      "en": "I am hungry.",
+      "ru": "Я проголодался."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "喉",
+    "romaji": "Nodo",
+    "en_meaning": "Throat",
+    "ru_meaning": "Горло",
+    "example": {
+      "jp": "喉が渇きました。",
+      "romaji": "Nodo ga kawakimashita.",
+      "en": "I am thirsty.",
+      "ru": "Я хочу пить."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "頭",
+    "romaji": "Atama",
+    "en_meaning": "Head",
+    "ru_meaning": "Голова",
+    "example": {
+      "jp": "頭が痛いです。",
+      "romaji": "Atama ga itai desu.",
+      "en": "My head hurts.",
+      "ru": "У меня болит голова."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "髪",
+    "romaji": "Kami",
+    "en_meaning": "Hair",
+    "ru_meaning": "Волосы",
+    "example": {
+      "jp": "髪を短く切りました。",
+      "romaji": "Kami o mijikaku kirimashita.",
+      "en": "I cut my hair short.",
+      "ru": "Я коротко подстригся."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "顔",
+    "romaji": "Kao",
+    "en_meaning": "Face",
+    "ru_meaning": "Лицо",
+    "example": {
+      "jp": "石鹸で顔を洗います。",
+      "romaji": "Sekken de kao o araimasu.",
+      "en": "I wash my face with soap.",
+      "ru": "Я умываю лицо мылом."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "鼻",
+    "romaji": "Hana",
+    "en_meaning": "Nose",
+    "ru_meaning": "Нос",
+    "example": {
+      "jp": "鼻が詰まっています。",
+      "romaji": "Hana ga tsumatte imasu.",
+      "en": "My nose is stuffed.",
+      "ru": "У меня заложен нос."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "背中",
+    "romaji": "Senaka",
+    "en_meaning": "Back (body)",
+    "ru_meaning": "Спина",
+    "example": {
+      "jp": "背中を洗ってください。",
+      "romaji": "Senaka o aratte kudasai.",
+      "en": "Please wash my back.",
+      "ru": "Пожалуйста, помой мне спину."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "指",
+    "romaji": "Yubi",
+    "en_meaning": "Finger",
+    "ru_meaning": "Палец",
+    "example": {
+      "jp": "指に怪我をしました。",
+      "romaji": "Yubi ni kega o shimashita.",
+      "en": "I injured my finger.",
+      "ru": "Я поранил палец."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "熱",
+    "romaji": "Netsu",
+    "en_meaning": "Fever / Heat",
+    "ru_meaning": "Температура (жар)",
+    "example": {
+      "jp": "少し熱があります。",
+      "romaji": "Sukoshi netsu ga arimasu.",
+      "en": "I have a slight fever.",
+      "ru": "У меня небольшая температура."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "咳",
+    "romaji": "Seki",
+    "en_meaning": "Cough",
+    "ru_meaning": "Кашель",
+    "example": {
+      "jp": "咳が止まりません。",
+      "romaji": "Seki ga tomarimasen.",
+      "en": "The cough won't stop.",
+      "ru": "Кашель не прекращается."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "健康",
+    "romaji": "Kenkou",
+    "en_meaning": "Health",
+    "ru_meaning": "Здоровье",
+    "example": {
+      "jp": "健康が一番大切です。",
+      "romaji": "Kenkou ga ichiban taisetsu desu.",
+      "en": "Health is the most important thing.",
+      "ru": "Здоровье — это самое важное."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "運動",
+    "romaji": "Undou",
+    "en_meaning": "Exercise",
+    "ru_meaning": "Упражнение / Спорт",
+    "example": {
+      "jp": "毎朝運動をしています。",
+      "romaji": "Maiasa undou o shite imasu.",
+      "en": "I exercise every morning.",
+      "ru": "Я каждое утро делаю зарядку."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "散歩",
+    "romaji": "Sanpo",
+    "en_meaning": "Walk / Stroll",
+    "ru_meaning": "Прогулка",
+    "example": {
+      "jp": "公園を散歩します。",
+      "romaji": "Kouen o sanpo shimasu.",
+      "en": "I take a walk in the park.",
+      "ru": "Я гуляю в парке."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "服",
+    "romaji": "Fuku",
+    "en_meaning": "Clothes",
+    "ru_meaning": "Одежда",
+    "example": {
+      "jp": "暖かい服を着てください。",
+      "romaji": "Atatakai fuku o kite kudasai.",
+      "en": "Please wear warm clothes.",
+      "ru": "Пожалуйста, надень теплую одежду."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "靴",
+    "romaji": "Kutsu",
+    "en_meaning": "Shoes",
+    "ru_meaning": "Обувь",
+    "example": {
+      "jp": "新しい靴を履いています。",
+      "romaji": "Atarashii kutsu o haite imasu.",
+      "en": "I am wearing new shoes.",
+      "ru": "На мне новые туфли."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "鞄",
+    "romaji": "Kaban",
+    "en_meaning": "Bag",
+    "ru_meaning": "Сумка",
+    "example": {
+      "jp": "その鞄は重いですか？",
+      "romaji": "Sono kaban wa omoi desu ka?",
+      "en": "Is that bag heavy?",
+      "ru": "Эта сумка тяжелая?"
+    },
+    "level": "N5"
+  },
+  {
+    "word": "お土産",
+    "romaji": "Omiyage",
+    "en_meaning": "Souvenir",
+    "ru_meaning": "Сувенир / Подарок",
+    "example": {
+      "jp": "日本のお土産を買いました。",
+      "romaji": "Nihon no omiyage o kaimashita.",
+      "en": "I bought Japanese souvenirs.",
+      "ru": "Я купил японские сувениры."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "値段",
+    "romaji": "Nedan",
+    "en_meaning": "Price",
+    "ru_meaning": "Цена",
+    "example": {
+      "jp": "値段を調べてください。",
+      "romaji": "Nedan o shirabete kudasai.",
+      "en": "Please check the price.",
+      "ru": "Пожалуйста, проверь цену."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "会計",
+    "romaji": "Kaikei",
+    "en_meaning": "Bill / Check",
+    "ru_meaning": "Счет (к оплате)",
+    "example": {
+      "jp": "別々にお会計をお願いします。",
+      "romaji": "Betsubetsu ni okaikei o onegai shimasu.",
+      "en": "Separate checks, please.",
+      "ru": "Пожалуйста, раздельный счет."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "贈り物",
+    "romaji": "Okurimono",
+    "en_meaning": "Gift / Present",
+    "ru_meaning": "Подарок",
+    "example": {
+      "jp": "友達に贈り物を送りました。",
+      "romaji": "Tomodachi ni okurimono o okurimashita.",
+      "en": "I sent a gift to a friend.",
+      "ru": "Я отправил подарок другу."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "感謝",
+    "romaji": "Kansha",
+    "en_meaning": "Gratitude / Thanks",
+    "ru_meaning": "Благодарность",
+    "example": {
+      "jp": "心から感謝しています。",
+      "romaji": "Kokoro kara kansha shite imasu.",
+      "en": "I am grateful from the bottom of my heart.",
+      "ru": "Я благодарен от всего сердца."
+    },
+    "level": "N5"
+  },
+  {
+    "word": "意味",
+    "romaji": "Imi",
+    "en_meaning": "Meaning",
+    "ru_meaning": "Значение / Смысл",
+    "example": {
+      "jp": "この言葉の意味は何ですか？",
+      "romaji": "Kono kotoba no imi wa nan desu ka?",
+      "en": "What is the meaning of this word?",
+      "ru": "Какое значение у этого слова?"
+    },
+    "level": "N5"
+  },
+  {
+    "word": "説明",
+    "level": "N4",
+    "romaji": "Setsumei",
+    "en_meaning": "Explanation",
+    "ru_meaning": "Объяснение",
+    "example": {
+      "jp": "意味を説明してください。",
+      "romaji": "Imi o setsumei shite kudasai.",
+      "en": "Please explain the meaning.",
+      "ru": "Пожалуйста, объясните значение."
+    }
+  },
+  {
+    "word": "約束",
+    "level": "N4",
+    "romaji": "Yakusoku",
+    "en_meaning": "Promise",
+    "ru_meaning": "Обещание",
+    "example": {
+      "jp": "友達と約束があります。",
+      "romaji": "Tomodachi to yakusoku ga arimasu.",
+      "en": "I have a promise (appointment) with a friend.",
+      "ru": "У меня есть договоренность с другом."
+    }
+  },
+  {
+    "word": "手伝う",
+    "level": "N4",
+    "romaji": "Tetsudau",
+    "en_meaning": "To help / assist",
+    "ru_meaning": "Помогать",
+    "example": {
+      "jp": "母の仕事を手伝いました。",
+      "romaji": "Haha no shigoto o tetsudaimashita.",
+      "en": "I helped with my mother's work.",
+      "ru": "Я помог маме с работой."
+    }
+  },
+  {
+    "word": "探す",
+    "level": "N4",
+    "romaji": "Sagasu",
+    "en_meaning": "To look for / search",
+    "ru_meaning": "Искать",
+    "example": {
+      "jp": "鍵を探しています。",
+      "romaji": "Kagi o sagashite imasu.",
+      "en": "I am looking for my keys.",
+      "ru": "Я ищу ключи."
+    }
+  },
+  {
+    "word": "警察",
+    "level": "N4",
+    "romaji": "Keisatsu",
+    "en_meaning": "Police",
+    "ru_meaning": "Полиция",
+    "example": {
+      "jp": "警察を呼んでください！",
+      "romaji": "Keisatsu o yonde kudasai!",
+      "en": "Please call the police!",
+      "ru": "Пожалуйста, вызовите полицию!"
+    }
+  },
+  {
+    "word": "工場",
+    "level": "N4",
+    "romaji": "Koujou",
+    "en_meaning": "Factory",
+    "ru_meaning": "Завод / Фабрика",
+    "example": {
+      "jp": "父は工場で働いています。",
+      "romaji": "Chichi wa koujou de hatarakite imasu.",
+      "en": "My father works at a factory.",
+      "ru": "Мой отец работает на заводе."
+    }
+  },
+  {
+    "word": "会議",
+    "level": "N4",
+    "romaji": "Kaigi",
+    "en_meaning": "Meeting / Conference",
+    "ru_meaning": "Собрание / Совещание",
+    "example": {
+      "jp": "明日、重要な会議があります。",
+      "romaji": "Ashita, juuyouna kaigi ga arimasu.",
+      "en": "There is an important meeting tomorrow.",
+      "ru": "Завтра будет важное совещание."
+    }
+  },
+  {
+    "word": "変わる",
+    "level": "N4",
+    "romaji": "Kawaru",
+    "en_meaning": "To change",
+    "ru_meaning": "Меняться / Изменяться",
+    "example": {
+      "jp": "信号が青に変わりました。",
+      "romaji": "Shingou ga ao ni kawarimashita.",
+      "en": "The traffic light changed to green.",
+      "ru": "Светофор сменился на зеленый."
+    }
+  },
+  {
+    "word": "住所",
+    "level": "N4",
+    "romaji": "Juusho",
+    "en_meaning": "Address",
+    "ru_meaning": "Адрес",
+    "example": {
+      "jp": "ここに住所を書いてください。",
+      "romaji": "Koko ni juusho o kaite kudasai.",
+      "en": "Please write your address here.",
+      "ru": "Пожалуйста, напишите здесь ваш адрес."
+    }
+  },
+  {
+    "word": "最近",
+    "level": "N4",
+    "romaji": "Saikin",
+    "en_meaning": "Recently",
+    "ru_meaning": "В последнее время / Недавно",
+    "example": {
+      "jp": "最近、彼に会いましたか？",
+      "romaji": "Saikin, kare ni aimashita ka?",
+      "en": "Have you met him recently?",
+      "ru": "Вы виделись с ним в последнее время?"
+    }
+  },
+  {
+    "word": "必要",
+    "level": "N4",
+    "romaji": "Hitsuyou",
+    "en_meaning": "Necessary",
+    "ru_meaning": "Необходимый / Нужный",
+    "example": {
+      "jp": "パスポートが必要です。",
+      "romaji": "Pasupooto ga hitsuyou desu.",
+      "en": "A passport is necessary.",
+      "ru": "Нужен паспорт."
+    }
+  },
+  {
+    "word": "無理",
+    "level": "N4",
+    "romaji": "Muri",
+    "en_meaning": "Impossible / Unreasonable",
+    "ru_meaning": "Невозможный / Чрезмерный",
+    "example": {
+      "jp": "それは無理なお願いです。",
+      "romaji": "Sore wa muri na onegai desu.",
+      "en": "That is an impossible request.",
+      "ru": "Это невыполнимая просьба."
+    }
+  },
+  {
+    "word": "複雑",
+    "level": "N4",
+    "romaji": "Fukuzatsu",
+    "en_meaning": "Complicated",
+    "ru_meaning": "Сложный / Запутанный",
+    "example": {
+      "jp": "この機械は複雑です。",
+      "romaji": "Kono kikai wa fukuzatsu desu.",
+      "en": "This machine is complicated.",
+      "ru": "Этот механизм сложный."
+    }
+  },
+  {
+    "word": "特別",
+    "level": "N4",
+    "romaji": "Tokubetsu",
+    "en_meaning": "Special",
+    "ru_meaning": "Особенный",
+    "example": {
+      "jp": "今日は特別な日です。",
+      "romaji": "Kyou wa tokubetsu na hi desu.",
+      "en": "Today is a special day.",
+      "ru": "Сегодня особенный день."
+    }
+  },
+  {
+    "word": "味",
+    "level": "N4",
+    "romaji": "Aji",
+    "en_meaning": "Taste / Flavor",
+    "ru_meaning": "Вкус",
+    "example": {
+      "jp": "このスープは変な味がします。",
+      "romaji": "Kono suupu wa hen na aji ga shimasu.",
+      "en": "This soup tastes strange.",
+      "ru": "У этого супа странный вкус."
+    }
+  },
+  {
+    "word": "匂い",
+    "level": "N4",
+    "romaji": "Nioi",
+    "en_meaning": "Smell / Scent",
+    "ru_meaning": "Запах",
+    "example": {
+      "jp": "いい匂いがしますね。",
+      "romaji": "Ii nioi ga shimasu ne.",
+      "en": "It smells good, doesn't it?",
+      "ru": "Приятно пахнет, правда?"
+    }
+  },
+  {
+    "word": "建てる",
+    "level": "N4",
+    "romaji": "Tateru",
+    "en_meaning": "To build",
+    "ru_meaning": "Строить",
+    "example": {
+      "jp": "新しい家を建てたいです。",
+      "romaji": "Atarashii ie o tatetai desu.",
+      "en": "I want to build a new house.",
+      "ru": "Я хочу построить новый дом."
+    }
+  },
+  {
+    "word": "治る",
+    "level": "N4",
+    "romaji": "Naoru",
+    "en_meaning": "To be cured / To get better",
+    "ru_meaning": "Выздоравливать / Проходить (о болезни)",
+    "example": {
+      "jp": "風邪が治りました。",
+      "romaji": "Kaze ga naorimashita.",
+      "en": "My cold has been cured.",
+      "ru": "Простуда прошла."
+    }
+  },
+  {
+    "word": "戻る",
+    "level": "N4",
+    "romaji": "Modoru",
+    "en_meaning": "To return (to a place)",
+    "ru_meaning": "Возвращаться (обратно)",
+    "example": {
+      "jp": "席に戻ってください。",
+      "romaji": "Seki ni modotte kudasai.",
+      "en": "Please return to your seat.",
+      "ru": "Пожалуйста, вернитесь на место."
+    }
+  },
+  {
+    "word": "習慣",
+    "level": "N4",
+    "romaji": "Shuukan",
+    "en_meaning": "Custom / Habit",
+    "ru_meaning": "Привычка / Обычай",
+    "example": {
+      "jp": "日本の習慣を学びたいです。",
+      "romaji": "Nihon no shuukan o manabitai desu.",
+      "en": "I want to learn Japanese customs.",
+      "ru": "Я хочу изучить японские обычаи."
+    }
+  },
+  {
+    "word": "危険",
+    "level": "N4",
+    "romaji": "Kiken",
+    "en_meaning": "Danger",
+    "ru_meaning": "Опасность",
+    "example": {
+      "jp": "ここは遊ぶのに危険です。",
+      "romaji": "Koko wa asobu no ni kiken desu.",
+      "en": "It is dangerous to play here.",
+      "ru": "Здесь опасно играть."
+    }
+  },
+  {
+    "word": "人口",
+    "level": "N4",
+    "romaji": "Jinkou",
+    "en_meaning": "Population",
+    "ru_meaning": "Население",
+    "example": {
+      "jp": "この町の人口は少ないです。",
+      "romaji": "Kono machi no jinkou wa sukunai desu.",
+      "en": "The population of this town is small.",
+      "ru": "Население этого города небольшое."
+    }
+  },
+  {
+    "word": "教育",
+    "level": "N4",
+    "romaji": "Kyouiku",
+    "en_meaning": "Education",
+    "ru_meaning": "Образование",
+    "example": {
+      "jp": "教育は大切です。",
+      "romaji": "Kyouiku wa taisetsu desu.",
+      "en": "Education is important.",
+      "ru": "Образование важно."
+    }
+  },
+  {
+    "word": "番組",
+    "level": "N4",
+    "romaji": "Bangumi",
+    "en_meaning": "TV Program",
+    "ru_meaning": "Передача (ТВ)",
+    "example": {
+      "jp": "好きなテレビ番組がありますか？",
+      "romaji": "Sukina terebi bangumi ga arimasu ka?",
+      "en": "Do you have a favorite TV program?",
+      "ru": "У тебя есть любимая телепередача?"
+    }
+  },
+  {
+    "word": "貿易",
+    "level": "N4",
+    "romaji": "Boueki",
+    "en_meaning": "Trade",
+    "ru_meaning": "Торговля",
+    "example": {
+      "jp": "外国と貿易をしています。",
+      "romaji": "Gaikoku to boueki o shite imasu.",
+      "en": "We are trading with foreign countries.",
+      "ru": "Мы ведем торговлю с зарубежными странами."
+    }
+  },
+  {
+    "word": "産業",
+    "level": "N4",
+    "romaji": "Sangyou",
+    "en_meaning": "Industry",
+    "ru_meaning": "Промышленность / Индустрия",
+    "example": {
+      "jp": "自動車産業は有名です。",
+      "romaji": "Jidousha sangyou wa yuumei desu.",
+      "en": "The automobile industry is famous.",
+      "ru": "Автомобильная промышленность знаменита."
+    }
+  },
+  {
+    "word": "正しい",
+    "level": "N4",
+    "romaji": "Tadashii",
+    "en_meaning": "Correct / Right",
+    "ru_meaning": "Правильный",
+    "example": {
+      "jp": "正しい答えを選んでください。",
+      "romaji": "Tadashii kotae o erande kudasai.",
+      "en": "Please choose the correct answer.",
+      "ru": "Пожалуйста, выберите правильный ответ."
+    }
+  },
+  {
+    "word": "丁寧",
+    "level": "N4",
+    "romaji": "Teinei",
+    "en_meaning": "Polite / Careful",
+    "ru_meaning": "Вежливый / Аккуратный",
+    "example": {
+      "jp": "彼はとても丁寧な人です。",
+      "romaji": "Kare wa totemo teinei na hito desu.",
+      "en": "He is a very polite person.",
+      "ru": "Он очень вежливый человек."
+    }
+  },
+  {
+    "word": "紹介",
+    "level": "N4",
+    "romaji": "Shoukai",
+    "en_meaning": "Introduction",
+    "ru_meaning": "Представление (знакомство)",
+    "example": {
+      "jp": "友達を紹介します。",
+      "romaji": "Tomodachi o shoukai shimasu.",
+      "en": "I will introduce my friend.",
+      "ru": "Я представлю своего друга."
+    }
+  },
+  {
+    "word": "慣れる",
+    "level": "N4",
+    "romaji": "Nareru",
+    "en_meaning": "To get used to",
+    "ru_meaning": "Привыкать",
+    "example": {
+      "jp": "日本の生活に慣れましたか？",
+      "romaji": "Nihon no seikatsu ni naremashita ka?",
+      "en": "Have you gotten used to life in Japan?",
+      "ru": "Вы привыкли к жизни в Японии?"
+    }
+  }
+]
