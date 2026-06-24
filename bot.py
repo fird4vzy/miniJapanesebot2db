@@ -359,7 +359,7 @@ if __name__ == '__main__':
     application.add_handler(CommandHandler('start', start))
     application.add_handler(CallbackQueryHandler(button_handler))
 
-    target_time = datetime.time(hour=9, minute=0, second=0)
+    target_time = datetime.time(hour=9, minute=0, second=0, tzinfo=pytz.timezone("Asia/Tashkent"))
     application.job_queue.run_daily(send_daily_word, time=target_time)
 
     print("Bot is running with DB, XP and Streaks...")
