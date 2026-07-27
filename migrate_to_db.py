@@ -1,63 +1,62 @@
-import sqlite3
+"""
+One-off migration: moves per-user level preference out of settings.json
+and into the `level` column of the `users` table in japanese_bot.db.
+
+Run this ONCE on the VPS, after pulling the updated bot.py but before
+(or right after) restarting the service:
+
+    source venv/bin/activate
+    python3 migrate_level_to_db.py
+
+Safe to re-run — it only overwrites the level for users present in
+settings.json and leaves everyone else untouched. After confirming it
+worked (see printed summary), settings.json can be deleted.
+"""
 import json
 import os
+import sqlite3
+
+DB_NAME = 'japanese_bot.db'
+SETTINGS_FILE = 'settings.json'
 
 
-def migrate_to_db():
-    # 1. Setup Database Connection
-    conn = sqlite3.connect('japanese_bot.db')
+def main():
+    if not os.path.exists(SETTINGS_FILE):
+        print(f"No {SETTINGS_FILE} found — nothing to migrate.")
+        return
+
+    with open(SETTINGS_FILE, 'r', encoding='utf-8') as f:
+        settings = json.load(f)
+
+    if not settings:
+        print(f"{SETTINGS_FILE} is empty — nothing to migrate.")
+        return
+
+    conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
 
-    # Create the users table if it doesn't exist yet
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS users (
-            user_id INTEGER PRIMARY KEY,
-            first_name TEXT,
-            level_pref TEXT DEFAULT 'N5',
-            language_pref TEXT DEFAULT 'en',
-            xp INTEGER DEFAULT 0,
-            streak INTEGER DEFAULT 0,
-            last_seen DATETIME DEFAULT CURRENT_TIMESTAMP
+    # Make sure the column exists (bot.py's init_db() also does this,
+    # but this script can be run standalone too).
+    cursor.execute("PRAGMA table_info(users)")
+    existing_columns = {row[1] for row in cursor.fetchall()}
+    if "level" not in existing_columns:
+        cursor.execute("ALTER TABLE users ADD COLUMN level TEXT DEFAULT 'N5'")
+
+    migrated = 0
+    for user_id_str, level in settings.items():
+        user_id = int(user_id_str)
+        cursor.execute(
+            "INSERT INTO users (user_id, level) VALUES (?, ?) "
+            "ON CONFLICT(user_id) DO UPDATE SET level = excluded.level",
+            (user_id, level)
         )
-    ''')
-
-    # 2. Migrate Subscribers (subscribers.json)
-    if os.path.exists('subscribers.json'):
-        try:
-            with open('subscribers.json', 'r') as f:
-                subs = json.load(f)
-                # Handle if subs is a list [123, 456] or a dict {"123": ...}
-                user_ids = subs if isinstance(subs, list) else subs.keys()
-
-                for user_id in user_ids:
-                    cursor.execute('INSERT OR IGNORE INTO users (user_id) VALUES (?)', (int(user_id),))
-            print(f"✅ Migrated {len(user_ids)} subscribers to Database.")
-        except Exception as e:
-            print(f"⚠️ Could not migrate subscribers: {e}")
-
-    # 3. Migrate Settings (settings.json)
-    if os.path.exists('settings.json'):
-        try:
-            with open('settings.json', 'r') as f:
-                settings = json.load(f)
-                for user_id, data in settings.items():
-                    # Check if data is a dict like {"level": "N4"} or just a string "N4"
-                    if isinstance(data, dict):
-                        level = data.get('level', 'N5')
-                    else:
-                        level = data  # It's just the string "N4"
-
-                    cursor.execute('''
-                        UPDATE users SET level_pref = ? WHERE user_id = ?
-                    ''', (level, int(user_id)))
-            print("✅ Migrated user settings to Database.")
-        except Exception as e:
-            print(f"⚠️ Could not migrate settings: {e}")
+        migrated += 1
 
     conn.commit()
     conn.close()
-    print("🏁 Migration finished successfully.")
+    print(f"✅ Migrated level preference for {migrated} user(s) into {DB_NAME}.")
+    print(f"You can now delete {SETTINGS_FILE} (git rm --cached it too — see cleanup_repo.sh).")
 
 
 if __name__ == "__main__":
-    migrate_to_db()
+    main()
