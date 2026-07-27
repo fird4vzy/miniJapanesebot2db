@@ -20,9 +20,13 @@ load_dotenv()
 
 # --- CONFIGURATION ---
 TOKEN = os.getenv("BOT_TOKEN")
+if not TOKEN:
+    raise RuntimeError(
+        "BOT_TOKEN is not set. Create a .env file with BOT_TOKEN=<your token> "
+        "next to bot.py (see .env.example)."
+    )
 DB_NAME = 'japanese_bot.db'  # Switched to DB
 SUBSCRIBERS_FILE = 'subscribers.json'
-SETTINGS_FILE = 'settings.json'
 
 # --- LOGGING SETUP ---
 logging.basicConfig(
@@ -37,6 +41,26 @@ def get_db_connection():
     conn = sqlite3.connect(DB_NAME)
     conn.row_factory = sqlite3.Row
     return conn
+
+
+def init_db():
+    """Creates missing tables/columns. Safe to run every startup."""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS users (
+            user_id INTEGER PRIMARY KEY,
+            xp INTEGER DEFAULT 0,
+            streak INTEGER DEFAULT 0,
+            last_active_date TEXT
+        )
+    ''')
+    cursor.execute("PRAGMA table_info(users)")
+    existing_columns = {row["name"] for row in cursor.fetchall()}
+    if "level" not in existing_columns:
+        cursor.execute("ALTER TABLE users ADD COLUMN level TEXT DEFAULT 'N5'")
+    conn.commit()
+    conn.close()
 
 
 def load_words(level=None):
@@ -131,24 +155,24 @@ def save_subscribers(subs):
 
 
 def get_user_level(user_id):
-    try:
-        with open(SETTINGS_FILE, 'r', encoding='utf-8') as f:
-            settings = json.load(f)
-            return settings.get(str(user_id), 'N5')
-    except (FileNotFoundError, json.JSONDecodeError):
-        return 'N5'
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT level FROM users WHERE user_id = ?", (user_id,))
+    row = cursor.fetchone()
+    conn.close()
+    return row["level"] if row and row["level"] else 'N5'
 
 
 def save_user_setting(user_id, level):
-    settings = {}
-    try:
-        with open(SETTINGS_FILE, 'r', encoding='utf-8') as f:
-            settings = json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
-        pass
-    settings[str(user_id)] = level
-    with open(SETTINGS_FILE, 'w', encoding='utf-8') as f:
-        json.dump(settings, f, indent=2)
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "INSERT INTO users (user_id, level) VALUES (?, ?) "
+        "ON CONFLICT(user_id) DO UPDATE SET level = excluded.level",
+        (user_id, level)
+    )
+    conn.commit()
+    conn.close()
 
 
 # --- HELPER FUNCTIONS ---
@@ -356,6 +380,7 @@ async def send_daily_word(context: ContextTypes.DEFAULT_TYPE):
 
 
 if __name__ == '__main__':
+    init_db()
     application = ApplicationBuilder().token(TOKEN).build()
     application.add_handler(CommandHandler('start', start))
     application.add_handler(CallbackQueryHandler(button_handler))
