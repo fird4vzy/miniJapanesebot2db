@@ -2,3 +2,17 @@ venv/
 __pycache__/
 *.pyc
 .env
+
+# Runtime data — contains real user IDs / stats, must never be committed
+*.db
+*.db-journal
+subscribers.json
+settings.json
+scores.json
+
+# Logs
+*.log
+
+# Editor/backup cruft
+*.save
+aux | grep bot.py
