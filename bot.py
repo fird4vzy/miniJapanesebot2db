@@ -209,8 +209,14 @@ def get_keyboard():
 # --- SETTINGS MENU ---
 
 async def settings_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    query = update.callback_query
-    user_id = query.from_user.id
+    if update.callback_query:
+        query = update.callback_query
+        user_id = query.from_user.id
+        send = query.message.edit_text
+    else:
+        user_id = update.effective_user.id
+        send = update.message.reply_text
+
     current_level = get_user_level(user_id)
     text = (
         f"⚙️ **Settings**\n\n"
@@ -224,7 +230,7 @@ async def settings_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
         ],
         [InlineKeyboardButton("🔙 Back to Menu", callback_data='menu_main')]
     ]
-    await query.message.edit_text(text, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode='Markdown')
+    await send(text, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode='Markdown')
 
 
 # --- HANDLERS ---
@@ -248,6 +254,20 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(text, reply_markup=get_keyboard(), parse_mode='Markdown')
     else:
         await update.callback_query.message.edit_text(text, reply_markup=get_keyboard(), parse_mode='Markdown')
+
+
+async def info_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    text = (
+        "🇯🇵 **mini Japan**\n\n"
+        "A small bot to help you learn Japanese vocabulary for the JLPT "
+        "(N5/N4 levels).\n\n"
+        "Commands:\n"
+        "/start — open the main menu and see your stats\n"
+        "/quiz — start a quick JLPT quiz\n"
+        "/settings — change your N5/N4 difficulty\n"
+        "/info — this message"
+    )
+    await update.message.reply_text(text, parse_mode='Markdown')
 
 
 async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -301,8 +321,14 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # --- QUIZ ---
 
 async def start_quiz(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    query = update.callback_query
-    user_id = query.from_user.id
+    if update.callback_query:
+        query = update.callback_query
+        user_id = query.from_user.id
+        send = query.message.edit_text
+    else:
+        user_id = update.effective_user.id
+        send = update.message.reply_text
+
     user_level = get_user_level(user_id)
 
     # Fetch words from DB based on level
@@ -335,7 +361,7 @@ async def start_quiz(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"🇯🇵  **{correct_word['word']}** ({correct_word['romaji']})"
     )
 
-    await query.message.edit_text(
+    await send(
         text=quiz_text,
         reply_markup=InlineKeyboardMarkup(keyboard),
         parse_mode='Markdown'
@@ -383,6 +409,9 @@ if __name__ == '__main__':
     init_db()
     application = ApplicationBuilder().token(TOKEN).build()
     application.add_handler(CommandHandler('start', start))
+    application.add_handler(CommandHandler('info', info_command))
+    application.add_handler(CommandHandler('quiz', start_quiz))
+    application.add_handler(CommandHandler('settings', settings_menu))
     application.add_handler(CallbackQueryHandler(button_handler))
 
     target_time = datetime.time(hour=9, minute=0, second=0, tzinfo=ZoneInfo("Asia/Tashkent"))
