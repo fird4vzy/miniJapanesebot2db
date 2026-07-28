@@ -350,9 +350,10 @@ async def start_quiz(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = []
     for opt in options:
         is_right = "correct" if opt['word'] == correct_word['word'] else "wrong"
-        # The button displays the English meaning
+        # The button displays English + Russian meaning together
+        label = f"{opt['en_meaning']} / {opt['ru_meaning']}"
         keyboard.append(
-            [InlineKeyboardButton(opt['en_meaning'], callback_data=f"quiz_{is_right}_{correct_word['word']}")])
+            [InlineKeyboardButton(label, callback_data=f"quiz_{is_right}_{correct_word['word']}")])
 
     # --- FORMATTED TEXT TO MATCH YOUR IMAGE ---
     # This uses the exact emojis and layout from image_1b8e56.png
@@ -382,7 +383,7 @@ async def handle_quiz_answer(update: Update, context: ContextTypes.DEFAULT_TYPE)
     else:
         stats = get_user_stats(user_id)
         xp = stats['xp'] if isinstance(stats, sqlite3.Row) else 0
-        feedback = f"❌ **Wrong!**\n🎮 Total XP: {xp}\n\nThe correct answer was **{word_info['en_meaning']}**."
+        feedback = f"❌ **Wrong!**\n🎮 Total XP: {xp}\n\nThe correct answer was **{word_info['en_meaning']} / {word_info['ru_meaning']}**."
 
     response = f"{feedback}\n\n{format_word_message(word_info)}"
     next_keyboard = [[InlineKeyboardButton("🔄 Next Question", callback_data='quiz_start')],
