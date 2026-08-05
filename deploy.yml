@@ -35,10 +35,10 @@ jobs:
             source venv/bin/activate
             pip install -r requirements.txt
 
-            systemctl restart japanesebot
+            systemctl restart mini-japanese-bot
 
             # Confirm the bot actually came back, so a green check means
             # "running", not just "files copied".
             sleep 3
-            systemctl is-active --quiet japanesebot
-            echo "Deploy OK: japanesebot is active"
+            systemctl is-active --quiet mini-japanese-bot
+            echo "Deploy OK: mini-japanese-bot is active"
