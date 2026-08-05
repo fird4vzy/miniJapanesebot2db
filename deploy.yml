@@ -1,0 +1,44 @@
+name: Deploy Bot
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+
+          script: |
+            set -e
+            cd /root/miniJapanesebot2db
+
+            # Back up the DB before touching anything. If a deploy ever goes
+            # wrong, this is the copy that saves the words and user progress.
+            mkdir -p /root/backups
+            if [ -f japanese_bot.db ]; then
+              sqlite3 japanese_bot.db ".backup /root/backups/japanese_bot_predeploy.db"
+            fi
+
+            # --ff-only so a stray local edit on the VPS fails loudly
+            # instead of leaving a half-merged working tree.
+            git pull --ff-only origin main
+
+            source venv/bin/activate
+            pip install -r requirements.txt
+
+            systemctl restart japanesebot
+
+            # Confirm the bot actually came back, so a green check means
+            # "running", not just "files copied".
+            sleep 3
+            systemctl is-active --quiet japanesebot
+            echo "Deploy OK: japanesebot is active"

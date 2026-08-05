@@ -59,6 +59,26 @@ def init_db():
     existing_columns = {row["name"] for row in cursor.fetchall()}
     if "level" not in existing_columns:
         cursor.execute("ALTER TABLE users ADD COLUMN level TEXT DEFAULT 'N5'")
+
+    # The words table used to exist only because it was hand-created in
+    # DB Browser. Declaring it here means a fresh VPS can rebuild the schema
+    # from this repo alone. Matches the schema the live DB already uses.
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS words (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            word TEXT UNIQUE,
+            level TEXT,
+            romaji TEXT,
+            en_meaning TEXT,
+            ru_meaning TEXT,
+            example_jp TEXT,
+            example_romaji TEXT,
+            example_en TEXT,
+            example_ru TEXT
+        )
+    ''')
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_words_level ON words(level)")
+
     conn.commit()
     conn.close()
 
