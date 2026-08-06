@@ -7,6 +7,8 @@ import sqlite3  # Added SQLite
 
 from zoneinfo import ZoneInfo
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.error import BadRequest, Forbidden
+from telegram.helpers import escape_markdown
 from telegram.ext import (
     ApplicationBuilder,
     ContextTypes,
@@ -78,6 +80,17 @@ def init_db():
         )
     ''')
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_words_level ON words(level)")
+
+    # Remembers which daily words each subscriber has already received, so
+    # the daily pick can avoid repeats until their level is exhausted.
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS sent_words (
+            user_id INTEGER NOT NULL,
+            word TEXT NOT NULL,
+            sent_at TEXT NOT NULL,
+            PRIMARY KEY (user_id, word)
+        )
+    ''')
 
     conn.commit()
     conn.close()
@@ -263,8 +276,13 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     xp = stats['xp'] if isinstance(stats, sqlite3.Row) else 0
     streak = stats['streak'] if isinstance(stats, sqlite3.Row) else 0
 
+    # first_name is user-controlled. Unescaped, a name containing _ * ` or [
+    # makes Telegram reject the whole message, so /start would silently do
+    # nothing for that person forever.
+    safe_name = escape_markdown(user.first_name or "", version=1)
+
     text = (
-        f"Kon'nichiwa, {user.first_name}! 🇯🇵\n\n"
+        f"Kon'nichiwa, {safe_name}! 🇯🇵\n\n"
         f"🔥 **Streak:** {streak} days\n"
         f"🎮 **XP:** {xp} points\n\n"
         "What would you like to do today?"
@@ -298,6 +316,15 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if query.data == 'random':
         words = load_words(user_level)  # Uses level preference
+        if not words:
+            words = load_words()  # fall back to all levels
+        if not words:
+            # Empty DB (e.g. a fresh deploy before seed_words.py has run).
+            await query.message.reply_text(
+                "📭 Словарь пока пуст. Попробуйте позже.",
+                reply_markup=get_keyboard()
+            )
+            return
         random_word = random.choice(words)
         msg = format_word_message(random_word)
         await query.message.reply_text(msg, parse_mode='Markdown', reply_markup=get_keyboard())
@@ -355,6 +382,9 @@ async def start_quiz(update: Update, context: ContextTypes.DEFAULT_TYPE):
     filtered_words = load_words(user_level)
     if not filtered_words:
         filtered_words = load_words()  # fallback to all if level list is empty
+    if not filtered_words:
+        await send("📭 Словарь пока пуст. Попробуйте позже.")
+        return
 
     correct_word = random.choice(filtered_words)
 
@@ -392,10 +422,28 @@ async def start_quiz(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def handle_quiz_answer(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     user_id = query.from_user.id
-    _, result, correct_word_key = query.data.split('_')
+
+    # maxsplit=2 so a word containing '_' can't break the unpack.
+    parts = query.data.split('_', 2)
+    if len(parts) != 3:
+        await query.answer("Не удалось разобрать ответ.", show_alert=True)
+        return
+    _, result, correct_word_key = parts
 
     words = load_words()
     word_info = next((w for w in words if w['word'] == correct_word_key), None)
+
+    if word_info is None:
+        # The word was renamed or removed since this message was sent —
+        # e.g. pressing a button on an old message after a DB change.
+        await query.message.edit_text(
+            "⚠️ Этот вопрос устарел. Начните новую викторину.",
+            reply_markup=InlineKeyboardMarkup([
+                [InlineKeyboardButton("🔄 New Question", callback_data='quiz_start')],
+                [InlineKeyboardButton("🏁 Menu", callback_data='menu_main')]
+            ])
+        )
+        return
 
     if result == "correct":
         xp, streak = save_score_and_streak(user_id, 10)
@@ -412,18 +460,106 @@ async def handle_quiz_answer(update: Update, context: ContextTypes.DEFAULT_TYPE)
     await query.message.edit_text(response, reply_markup=InlineKeyboardMarkup(next_keyboard), parse_mode='Markdown')
 
 
+# --- ERROR HANDLER ---
+
+async def on_error(update: object, context: ContextTypes.DEFAULT_TYPE):
+    """Catches anything a handler raises.
+
+    Without this, python-telegram-bot logs 'No error handlers are registered'
+    and silently discards the update — the user gets no reply at all and the
+    bot looks frozen.
+    """
+    err = context.error
+
+    # Double-tapping a menu button makes Telegram reject the identical edit.
+    # It's harmless and needs no user-facing message.
+    if isinstance(err, BadRequest) and "not modified" in str(err).lower():
+        return
+
+    logging.error("Unhandled error while processing update", exc_info=err)
+
+    if isinstance(update, Update) and update.effective_chat:
+        try:
+            await context.bot.send_message(
+                chat_id=update.effective_chat.id,
+                text="⚠️ Что-то пошло не так. Попробуйте /start"
+            )
+        except Exception:
+            # Never let the error handler itself raise.
+            logging.exception("Failed to deliver the error notice")
+
+
 # --- DAILY JOB ---
 
+def pick_unseen_word(user_id, level):
+    """Picks a word this user hasn't received as a daily word yet.
+
+    Plain random.choice draws WITH replacement, so it re-sends words the user
+    has already seen — with ~460 words there's a ~61% chance of a repeat
+    within a month. This walks through the whole level before repeating
+    anything ("shuffle bag"), which is also just better for learning.
+    """
+    words = load_words(level)
+    if not words:
+        words = load_words()  # level empty (or unset) — fall back to everything
+    if not words:
+        return None
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT word FROM sent_words WHERE user_id = ?", (user_id,))
+    already_sent = {row["word"] for row in cursor.fetchall()}
+
+    unseen = [w for w in words if w["word"] not in already_sent]
+
+    if not unseen:
+        # Every word at this level has been sent — start a new cycle. Hold the
+        # most recent word out of the fresh pool, otherwise the cycle boundary
+        # can hand out the same word two days running.
+        cursor.execute(
+            "SELECT word FROM sent_words WHERE user_id = ? ORDER BY rowid DESC LIMIT 1",
+            (user_id,)
+        )
+        last_row = cursor.fetchone()
+        last_word = last_row["word"] if last_row else None
+
+        cursor.execute("DELETE FROM sent_words WHERE user_id = ?", (user_id,))
+        conn.commit()
+        unseen = [w for w in words if w["word"] != last_word] or words
+        logging.info(f"User {user_id} completed a full pass of level {level}; cycling.")
+
+    chosen = random.choice(unseen)
+
+    cursor.execute(
+        "INSERT OR REPLACE INTO sent_words (user_id, word, sent_at) VALUES (?, ?, ?)",
+        (user_id, chosen["word"], datetime.date.today().isoformat())
+    )
+    conn.commit()
+    conn.close()
+    return chosen
+
+
 async def send_daily_word(context: ContextTypes.DEFAULT_TYPE):
-    words = load_words()
     subscribers = load_subscribers()
     for chat_id in subscribers:
         try:
-            word = random.choice(words)
+            # Respect each subscriber's own N5/N4 setting — the old code sent
+            # from the whole table, so an N5 learner could get N4 words.
+            level = get_user_level(chat_id)
+            word = pick_unseen_word(chat_id, level)
+            if word is None:
+                logging.warning("Daily word skipped: word table is empty")
+                continue
             await context.bot.send_message(chat_id=chat_id, text=f"☀️ **Daily Word!**\n\n{format_word_message(word)}",
                                            parse_mode='Markdown', reply_markup=get_keyboard())
+        except Forbidden:
+            # User blocked the bot — stop trying to reach them every morning.
+            logging.info(f"{chat_id} blocked the bot; unsubscribing them.")
+            subs = load_subscribers()
+            subs.discard(chat_id)
+            save_subscribers(subs)
         except Exception as e:
-            logging.error(f"Error: {e}")
+            logging.error(f"Daily word failed for {chat_id}: {e}")
 
 
 if __name__ == '__main__':
@@ -434,6 +570,7 @@ if __name__ == '__main__':
     application.add_handler(CommandHandler('quiz', start_quiz))
     application.add_handler(CommandHandler('settings', settings_menu))
     application.add_handler(CallbackQueryHandler(button_handler))
+    application.add_error_handler(on_error)
 
     target_time = datetime.time(hour=9, minute=0, second=0, tzinfo=ZoneInfo("Asia/Tashkent"))
     application.job_queue.run_daily(send_daily_word, time=target_time)
