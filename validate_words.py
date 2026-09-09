@@ -38,7 +38,19 @@ def is_kana(cp):
 
 
 def is_kanji(cp):
-    return 0x4E00 <= cp <= 0x9FFF
+    # Main block plus Extension A, which holds rarer characters.
+    return 0x4E00 <= cp <= 0x9FFF or 0x3400 <= cp <= 0x4DBF
+
+
+def is_jp_punctuation(cp):
+    """CJK Symbols and Punctuation, U+3000-U+303F.
+
+    This block holds ordinary Japanese writing marks that an earlier
+    version of this checker wrongly flagged — most notably 々 (U+3005),
+    the kanji iteration mark in 別々, 色々 and 少々, which are all
+    perfectly correct Japanese.
+    """
+    return 0x3000 <= cp <= 0x303F
 
 
 def is_hangul(cp):
@@ -56,7 +68,7 @@ def check_japanese(text):
         cp = ord(ch)
         if ch in PUNCT or ch.isspace():
             continue
-        if is_kana(cp) or is_kanji(cp):
+        if is_kana(cp) or is_kanji(cp) or is_jp_punctuation(cp):
             continue
         if 0xFF00 <= cp <= 0xFFEF:  # fullwidth forms
             continue
