@@ -76,6 +76,8 @@ def init_db():
     existing_columns = {row["name"] for row in cursor.fetchall()}
     if "level" not in existing_columns:
         cursor.execute("ALTER TABLE users ADD COLUMN level TEXT DEFAULT 'N5'")
+    if "lang" not in existing_columns:
+        cursor.execute("ALTER TABLE users ADD COLUMN lang TEXT")
 
     # The words table used to exist only because it was hand-created in
     # DB Browser. Declaring it here means a fresh VPS can rebuild the schema
@@ -247,16 +249,18 @@ def save_user_setting(user_id, level):
 
 # --- HELPER FUNCTIONS ---
 
-def format_word_message(word_data):
+def format_word_message(word_data, lang="ru"):
     level = word_data.get('level', 'N5')
     example = word_data.get("example", {})
+    # Both translations stay on the card on purpose: the labels follow the
+    # interface language, but a learner benefits from seeing both meanings.
     msg = (
-        f"🏷 **Level:** {level}\n"
-        f"🇯🇵 **Word:** {word_data['word']}\n"
-        f"📖 **Romaji:** {word_data['romaji']}\n"
-        f"🇬🇧 **English:** {word_data['en_meaning']}\n"
-        f"🇷🇺 **Russian:** {word_data['ru_meaning']}\n\n"
-        f"📝 **Example:**\n"
+        f"{t('w_level', lang)} {level}\n"
+        f"{t('w_word', lang)} {word_data['word']}\n"
+        f"{t('w_romaji', lang)} {word_data['romaji']}\n"
+        f"{t('w_english', lang)} {word_data['en_meaning']}\n"
+        f"{t('w_russian', lang)} {word_data['ru_meaning']}\n\n"
+        f"{t('w_example', lang)}\n"
         f"🇯🇵: {example.get('jp', '-')}\n"
         f"📖: {example.get('romaji', '-')}\n"
         f"🇬🇧: {example.get('en', '-')}\n"
@@ -265,13 +269,13 @@ def format_word_message(word_data):
     return msg
 
 
-def get_keyboard():
+def get_keyboard(lang="ru"):
     keyboard = [
-        [InlineKeyboardButton("🎲 Get Random Word", callback_data='random')],
-        [InlineKeyboardButton("🧠 Take a Quiz", callback_data='quiz_start')],
-        [InlineKeyboardButton("⚙️ Settings / Level", callback_data='settings_menu')],
-        [InlineKeyboardButton("🔔 Subscribe (9 AM)", callback_data='subscribe')],
-        [InlineKeyboardButton("🔕 Unsubscribe", callback_data='unsubscribe')]
+        [InlineKeyboardButton(t("btn_random", lang), callback_data='random')],
+        [InlineKeyboardButton(t("btn_quiz", lang), callback_data='quiz_start')],
+        [InlineKeyboardButton(t("btn_settings", lang), callback_data='settings_menu')],
+        [InlineKeyboardButton(t("btn_subscribe", lang), callback_data='subscribe')],
+        [InlineKeyboardButton(t("btn_unsubscribe", lang), callback_data='unsubscribe')]
     ]
     return InlineKeyboardMarkup(keyboard)
 
@@ -284,6 +288,171 @@ def get_keyboard():
 # instead of editing code.
 TTS_ENGINE = os.getenv("TTS_ENGINE", "edge").lower()
 TTS_VOICE = os.getenv("TTS_VOICE", "ja-JP-NanamiNeural")
+
+
+# --- LOCALISATION ---
+
+# Every user-facing string lives here so the bot speaks one language at a
+# time instead of mixing them. Add a language by adding a key to each entry
+# and a tuple to UI_LANGUAGES.
+UI_LANGUAGES = [("ru", "Русский"), ("en", "English")]
+VALID_LANGS = [code for code, _ in UI_LANGUAGES]
+
+STRINGS = {
+    # --- main menu ---
+    "btn_random":     {"ru": "🎲 Случайное слово",     "en": "🎲 Get Random Word"},
+    "btn_quiz":       {"ru": "🧠 Викторина",            "en": "🧠 Take a Quiz"},
+    "btn_settings":   {"ru": "⚙️ Настройки",            "en": "⚙️ Settings"},
+    "btn_subscribe":  {"ru": "🔔 Подписаться (9:00)",   "en": "🔔 Subscribe (9 AM)"},
+    "btn_unsubscribe":{"ru": "🔕 Отписаться",           "en": "🔕 Unsubscribe"},
+    "btn_back":       {"ru": "🔙 В меню",               "en": "🔙 Back to Menu"},
+    "btn_menu":       {"ru": "🏁 Меню",                 "en": "🏁 Menu"},
+    "btn_next_q":     {"ru": "🔄 Следующий вопрос",     "en": "🔄 Next Question"},
+    "btn_new_q":      {"ru": "🔄 Новый вопрос",         "en": "🔄 New Question"},
+
+    # --- word card ---
+    "w_level":   {"ru": "🏷 **Уровень:**",   "en": "🏷 **Level:**"},
+    "w_word":    {"ru": "🇯🇵 **Слово:**",     "en": "🇯🇵 **Word:**"},
+    "w_romaji":  {"ru": "📖 **Ромадзи:**",   "en": "📖 **Romaji:**"},
+    "w_english": {"ru": "🇬🇧 **Английский:**","en": "🇬🇧 **English:**"},
+    "w_russian": {"ru": "🇷🇺 **Русский:**",   "en": "🇷🇺 **Russian:**"},
+    "w_example": {"ru": "📝 **Пример:**",     "en": "📝 **Example:**"},
+
+    # --- start / stats ---
+    "greeting":  {"ru": "Конничива, {name}! 🇯🇵",  "en": "Kon'nichiwa, {name}! 🇯🇵"},
+    "streak":    {"ru": "🔥 **Серия:** {n} дн.",   "en": "🔥 **Streak:** {n} days"},
+    "xp":        {"ru": "🎮 **Опыт:** {n}",        "en": "🎮 **XP:** {n} points"},
+    "what_todo": {"ru": "Чем займёмся сегодня?",   "en": "What would you like to do today?"},
+
+    # --- settings ---
+    "settings_title": {"ru": "⚙️ **Настройки**",        "en": "⚙️ **Settings**"},
+    "cur_level":      {"ru": "Текущий уровень: **{lvl}**", "en": "Current level: **{lvl}**"},
+    "choose_level":   {"ru": "Выберите уровень сложности:", "en": "Choose your difficulty level:"},
+    # Russian needs three plural forms; see plural_ru below.
+    "words_forms":    {"ru": "слово|слова|слов",        "en": "word|words|words"},
+    "cur_lang":       {"ru": "Язык интерфейса: **{lang}**", "en": "Interface language: **{lang}**"},
+    "bad_level":      {"ru": "Неизвестный уровень.",    "en": "Unknown level."},
+
+    # --- level names ---
+    "lvl_N5": {"ru": "Начальный",  "en": "Beginner"},
+    "lvl_N4": {"ru": "Базовый",    "en": "Elementary"},
+    "lvl_N3": {"ru": "Средний",    "en": "Intermediate"},
+    "lvl_N2": {"ru": "Выше среднего", "en": "Upper-intermediate"},
+    "lvl_N1": {"ru": "Продвинутый", "en": "Advanced"},
+
+    # --- subscription ---
+    "subscribed":     {"ru": "✅ Вы подписались на слово дня в 9:00!", "en": "✅ You have subscribed to daily words at 9:00 AM!"},
+    "already_sub":    {"ru": "ℹ️ Вы уже подписаны.",   "en": "ℹ️ You are already subscribed."},
+    "unsubscribed":   {"ru": "❌ Вы отписались от слова дня.", "en": "❌ You have unsubscribed from daily words."},
+    "not_sub":        {"ru": "ℹ️ Вы не были подписаны.", "en": "ℹ️ You were not subscribed."},
+    "daily_header":   {"ru": "☀️ **Слово дня!**",       "en": "☀️ **Daily Word!**"},
+
+    # --- quiz ---
+    "quiz_q":       {"ru": "❓ **Как переводится это слово?**", "en": "❓ **How do you translate this?**"},
+    "quiz_right":   {"ru": "✅ **Верно! (+10 XP)**\n🔥 Серия: {streak} дн. | 🎮 Всего опыта: {xp}",
+                     "en": "✅ **Correct! (+10 XP)**\n🔥 Streak: {streak} days | 🎮 Total XP: {xp}"},
+    "quiz_wrong":   {"ru": "❌ **Неверно!**\n🎮 Всего опыта: {xp}\n\nПравильный ответ: **{answer}**.",
+                     "en": "❌ **Wrong!**\n🎮 Total XP: {xp}\n\nThe correct answer was **{answer}**."},
+    "quiz_stale":   {"ru": "⚠️ Этот вопрос устарел. Начните новую викторину.",
+                     "en": "⚠️ This question is out of date. Start a new quiz."},
+    "quiz_unparsed":{"ru": "Не удалось разобрать ответ.", "en": "Couldn't read that answer."},
+
+    # --- errors / states ---
+    "empty_db":  {"ru": "📭 Словарь пока пуст. Попробуйте позже.", "en": "📭 The dictionary is empty. Please try again later."},
+    "tts_busy":  {"ru": "🔊 Готовлю озвучку…",  "en": "🔊 Preparing audio…"},
+    "tts_fail":  {"ru": "🔇 Озвучка сейчас недоступна. Попробуйте позже.", "en": "🔇 Audio is unavailable right now. Please try later."},
+    "generic_err": {"ru": "⚠️ Что-то пошло не так. Попробуйте /start", "en": "⚠️ Something went wrong. Try /start"},
+
+    # --- info ---
+    "info": {
+        "ru": ("🇯🇵 **mini Japan**\n\n"
+               "Бот для изучения японских слов к экзамену JLPT "
+               "(уровни N5–N3).\n\n"
+               "Команды:\n"
+               "/start — главное меню и статистика\n"
+               "/quiz — быстрая викторина\n"
+               "/settings — уровень и язык\n"
+               "/info — это сообщение"),
+        "en": ("🇯🇵 **mini Japan**\n\n"
+               "A bot for learning Japanese vocabulary for the JLPT "
+               "(levels N5–N3).\n\n"
+               "Commands:\n"
+               "/start — main menu and your stats\n"
+               "/quiz — a quick quiz\n"
+               "/settings — level and language\n"
+               "/info — this message"),
+    },
+}
+
+
+def t(key, lang, /, **kwargs):
+    """Looks up a string in `lang`, falling back to English then the key.
+
+    `key` and `lang` are positional-only (the `/`) so that a string
+    containing a {key} or {lang} placeholder can't collide with these
+    parameter names — t("cur_lang", "ru", lang="Русский") would otherwise
+    raise TypeError at runtime.
+    """
+    entry = STRINGS.get(key)
+    if not entry:
+        logging.warning(f"Missing translation key: {key}")
+        return key
+    text = entry.get(lang) or entry.get("en") or key
+    return text.format(**kwargs) if kwargs else text
+
+
+def plural_ru(n, forms):
+    """Picks the right Russian plural form: 1 слово, 2 слова, 5 слов."""
+    one, few, many = forms.split("|")
+    if n % 100 in (11, 12, 13, 14):
+        return many
+    last = n % 10
+    if last == 1:
+        return one
+    if last in (2, 3, 4):
+        return few
+    return many
+
+
+def words_count_label(n, lang):
+    """'1 слово' / '2 слова' / '5 слов', and '1 word' / '2 words'."""
+    forms = t("words_forms", lang)
+    if lang == "ru":
+        form = plural_ru(n, forms)
+    else:
+        one, many, _ = forms.split("|")
+        form = one if n == 1 else many
+    return f"{n} {form}"
+
+
+def get_user_lang(user_id, telegram_code=None):
+    """The user's interface language.
+
+    First contact seeds it from Telegram's own language setting, so a
+    Russian-speaking user gets Russian without touching the menu.
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT lang FROM users WHERE user_id = ?", (user_id,))
+    row = cursor.fetchone()
+    conn.close()
+    if row and row["lang"]:
+        return row["lang"]
+    if telegram_code and telegram_code.lower().startswith("ru"):
+        return "ru"
+    return "en" if telegram_code else "ru"
+
+
+def save_user_lang(user_id, lang):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "INSERT INTO users (user_id, lang) VALUES (?, ?) "
+        "ON CONFLICT(user_id) DO UPDATE SET lang = excluded.lang",
+        (user_id, lang)
+    )
+    conn.commit()
+    conn.close()
 
 
 def _text_hash(text):
@@ -409,14 +578,14 @@ async def _get_or_make_audio(context, chat_id, text):
     return file_id
 
 
-async def deliver_word(context, chat_id, word_data, keyboard, prefix=""):
+async def deliver_word(context, chat_id, word_data, keyboard, prefix="", lang="ru"):
     """Sends a word as ONE message: audio player + full text + buttons.
 
     Telegram can't put a playable clip inside a text message, but a voice
     message can carry the text as its caption — which gives a single
     bubble instead of a text message followed by a separate voice note.
     """
-    caption = prefix + format_word_message(word_data)
+    caption = prefix + format_word_message(word_data, lang)
     file_id = None
     if len(caption) <= CAPTION_LIMIT:
         file_id = await _get_or_make_audio(context, chat_id, word_data["word"])
@@ -453,7 +622,8 @@ async def send_pronunciation(update: Update, context: ContextTypes.DEFAULT_TYPE,
             logging.info(f"Stale file_id for {text!r}; regenerating.")
             drop_cached_audio(text)
 
-    await query.answer("🔊 Готовлю озвучку…")
+    lang = get_user_lang(query.from_user.id)
+    await query.answer(t("tts_busy", lang))
 
     with tempfile.TemporaryDirectory() as tmp:
         mp3_path = os.path.join(tmp, "a.mp3")
@@ -465,7 +635,7 @@ async def send_pronunciation(update: Update, context: ContextTypes.DEFAULT_TYPE,
             logging.error(f"TTS failed for {text!r}: {e}")
             await context.bot.send_message(
                 chat_id=chat_id,
-                text="🔇 Озвучка сейчас недоступна. Попробуйте позже."
+                text=t("tts_fail", lang)
             )
             return
 
@@ -499,25 +669,35 @@ async def settings_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
         send = update.message.reply_text
 
     current_level = get_user_level(user_id)
+    lang = get_user_lang(user_id)
     counts = count_words_by_level()
+    lang_name = dict(UI_LANGUAGES).get(lang, lang)
 
     text = (
-        f"⚙️ **Settings**\n\n"
-        f"Current Level: **{current_level}**\n"
-        "Choose your difficulty level:"
+        f"{t('settings_title', lang)}\n\n"
+        f"{t('cur_level', lang, lvl=current_level)}\n"
+        f"{t('cur_lang', lang, lang=lang_name)}\n\n"
+        f"{t('choose_level', lang)}"
     )
 
     # One row per level, built from LEVELS so adding N2/N1 needs no edit here.
     # The word count is shown so an empty level is obvious before it's picked.
     keyboard = []
-    for code, label in LEVELS:
+    for code, _ in LEVELS:
         mark = '✅ ' if current_level == code else ''
-        n = counts.get(code, 0)
+        label = t(f"lvl_{code}", lang)
+        n = words_count_label(counts.get(code, 0), lang)
         keyboard.append([InlineKeyboardButton(
-            f"{mark}{code} ({label}) — {n} слов",
+            f"{mark}{code} ({label}) — {n}",
             callback_data=f'set_{code}'
         )])
-    keyboard.append([InlineKeyboardButton("🔙 Back to Menu", callback_data='menu_main')])
+
+    keyboard.append([
+        InlineKeyboardButton(f"{'✅ ' if lang == code else ''}{name}",
+                             callback_data=f'lang_{code}')
+        for code, name in UI_LANGUAGES
+    ])
+    keyboard.append([InlineKeyboardButton(t("btn_back", lang), callback_data='menu_main')])
 
     await send(text, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode='Markdown')
 
@@ -536,32 +716,25 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # makes Telegram reject the whole message, so /start would silently do
     # nothing for that person forever.
     safe_name = escape_markdown(user.first_name or "", version=1)
+    lang = get_user_lang(user_id, getattr(user, "language_code", None))
 
     text = (
-        f"Kon'nichiwa, {safe_name}! 🇯🇵\n\n"
-        f"🔥 **Streak:** {streak} days\n"
-        f"🎮 **XP:** {xp} points\n\n"
-        "What would you like to do today?"
+        f"{t('greeting', lang, name=safe_name)}\n\n"
+        f"{t('streak', lang, n=streak)}\n"
+        f"{t('xp', lang, n=xp)}\n\n"
+        f"{t('what_todo', lang)}"
     )
 
     if update.message:
-        await update.message.reply_text(text, reply_markup=get_keyboard(), parse_mode='Markdown')
+        await update.message.reply_text(text, reply_markup=get_keyboard(lang), parse_mode='Markdown')
     else:
-        await update.callback_query.message.edit_text(text, reply_markup=get_keyboard(), parse_mode='Markdown')
+        await update.callback_query.message.edit_text(text, reply_markup=get_keyboard(lang), parse_mode='Markdown')
 
 
 async def info_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    text = (
-        "🇯🇵 **mini Japan**\n\n"
-        "A small bot to help you learn Japanese vocabulary for the JLPT "
-        "(N5/N4 levels).\n\n"
-        "Commands:\n"
-        "/start — open the main menu and see your stats\n"
-        "/quiz — start a quick JLPT quiz\n"
-        "/settings — change your N5/N4 difficulty\n"
-        "/info — this message"
-    )
-    await update.message.reply_text(text, parse_mode='Markdown')
+    user = update.effective_user
+    lang = get_user_lang(user.id, getattr(user, "language_code", None))
+    await update.message.reply_text(t("info", lang), parse_mode='Markdown')
 
 
 async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -569,6 +742,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await query.answer()
     user_id = query.from_user.id
     user_level = get_user_level(user_id)
+    lang = get_user_lang(user_id, getattr(query.from_user, "language_code", None))
 
     if query.data == 'random':
         words = load_words(user_level)  # Uses level preference
@@ -577,12 +751,13 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if not words:
             # Empty DB (e.g. a fresh deploy before seed_words.py has run).
             await query.message.reply_text(
-                "📭 Словарь пока пуст. Попробуйте позже.",
-                reply_markup=get_keyboard()
+                t("empty_db", lang),
+                reply_markup=get_keyboard(lang)
             )
             return
         random_word = random.choice(words)
-        await deliver_word(context, query.message.chat_id, random_word, get_keyboard())
+        await deliver_word(context, query.message.chat_id, random_word,
+                           get_keyboard(lang), lang=lang)
 
     elif query.data == 'quiz_start':
         await start_quiz(update, context)
@@ -599,10 +774,16 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         # chat history still have it, and it should keep working.
         await send_pronunciation(update, context, query.data.split('_', 1)[1])
 
+    elif query.data.startswith('lang_'):
+        new_lang = query.data[len('lang_'):]
+        if new_lang in VALID_LANGS:
+            save_user_lang(user_id, new_lang)
+        await settings_menu(update, context)
+
     elif query.data.startswith('set_'):
         new_level = query.data[len('set_'):]
         if new_level not in VALID_LEVELS:
-            await query.answer("Неизвестный уровень.", show_alert=True)
+            await query.answer(t("bad_level", lang), show_alert=True)
             return
         save_user_setting(user_id, new_level)
         await settings_menu(update, context)
@@ -612,18 +793,18 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if user_id not in subscribers:
             subscribers.add(user_id)
             save_subscribers(subscribers)
-            await query.message.reply_text("✅ You have subscribed to daily words at 9:00 AM!")
+            await query.message.reply_text(t("subscribed", lang))
         else:
-            await query.message.reply_text("ℹ️ You are already subscribed.")
+            await query.message.reply_text(t("already_sub", lang))
 
     elif query.data == 'unsubscribe':
         subscribers = load_subscribers()
         if user_id in subscribers:
             subscribers.remove(user_id)
             save_subscribers(subscribers)
-            await query.message.reply_text("❌ You have unsubscribed from daily words.")
+            await query.message.reply_text(t("unsubscribed", lang))
         else:
-            await query.message.reply_text("ℹ️ You were not subscribed.")
+            await query.message.reply_text(t("not_sub", lang))
 
     elif query.data == 'menu_main':
         await start(update, context)
@@ -641,13 +822,14 @@ async def start_quiz(update: Update, context: ContextTypes.DEFAULT_TYPE):
         send = update.message.reply_text
 
     user_level = get_user_level(user_id)
+    lang = get_user_lang(user_id)
 
     # Fetch words from DB based on level
     filtered_words = load_words(user_level)
     if not filtered_words:
         filtered_words = load_words()  # fallback to all if level list is empty
     if not filtered_words:
-        await send("📭 Словарь пока пуст. Попробуйте позже.")
+        await send(t("empty_db", lang))
         return
 
     correct_word = random.choice(filtered_words)
@@ -665,14 +847,15 @@ async def start_quiz(update: Update, context: ContextTypes.DEFAULT_TYPE):
     for opt in options:
         is_right = "correct" if opt['word'] == correct_word['word'] else "wrong"
         # The button displays English + Russian meaning together
-        label = f"{opt['en_meaning']} / {opt['ru_meaning']}"
+        # One language per button: showing both makes the buttons unreadable.
+        label = opt['ru_meaning'] if lang == 'ru' else opt['en_meaning']
         keyboard.append(
             [InlineKeyboardButton(label, callback_data=f"quiz_{is_right}_{correct_word['word']}")])
 
     # --- FORMATTED TEXT TO MATCH YOUR IMAGE ---
     # This uses the exact emojis and layout from image_1b8e56.png
     quiz_text = (
-        f"❓ **How do you translate this?**\n\n"
+        f"{t('quiz_q', lang)}\n\n"
         f"🇯🇵  **{correct_word['word']}** ({correct_word['romaji']})"
     )
 
@@ -688,9 +871,11 @@ async def handle_quiz_answer(update: Update, context: ContextTypes.DEFAULT_TYPE)
     user_id = query.from_user.id
 
     # maxsplit=2 so a word containing '_' can't break the unpack.
+    lang = get_user_lang(user_id)
+
     parts = query.data.split('_', 2)
     if len(parts) != 3:
-        await query.answer("Не удалось разобрать ответ.", show_alert=True)
+        await query.answer(t("quiz_unparsed", lang), show_alert=True)
         return
     _, result, correct_word_key = parts
 
@@ -701,25 +886,26 @@ async def handle_quiz_answer(update: Update, context: ContextTypes.DEFAULT_TYPE)
         # The word was renamed or removed since this message was sent —
         # e.g. pressing a button on an old message after a DB change.
         await query.message.edit_text(
-            "⚠️ Этот вопрос устарел. Начните новую викторину.",
+            t("quiz_stale", lang),
             reply_markup=InlineKeyboardMarkup([
-                [InlineKeyboardButton("🔄 New Question", callback_data='quiz_start')],
-                [InlineKeyboardButton("🏁 Menu", callback_data='menu_main')]
+                [InlineKeyboardButton(t("btn_new_q", lang), callback_data='quiz_start')],
+                [InlineKeyboardButton(t("btn_menu", lang), callback_data='menu_main')]
             ])
         )
         return
 
     if result == "correct":
         xp, streak = save_score_and_streak(user_id, 10)
-        feedback = f"✅ **Correct! (+10 XP)**\n🔥 Streak: {streak} days | 🎮 Total XP: {xp}"
+        feedback = t("quiz_right", lang, streak=streak, xp=xp)
     else:
         stats = get_user_stats(user_id)
         xp = stats['xp'] if isinstance(stats, sqlite3.Row) else 0
-        feedback = f"❌ **Wrong!**\n🎮 Total XP: {xp}\n\nThe correct answer was **{word_info['en_meaning']} / {word_info['ru_meaning']}**."
+        answer = word_info['ru_meaning'] if lang == 'ru' else word_info['en_meaning']
+        feedback = t("quiz_wrong", lang, xp=xp, answer=answer)
 
     next_keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("🔄 Next Question", callback_data='quiz_start')],
-        [InlineKeyboardButton("🏁 Menu", callback_data='menu_main')]
+        [InlineKeyboardButton(t("btn_next_q", lang), callback_data='quiz_start')],
+        [InlineKeyboardButton(t("btn_menu", lang), callback_data='menu_main')]
     ])
 
     # A text message can't be edited into a voice message, so to keep the
@@ -729,10 +915,10 @@ async def handle_quiz_answer(update: Update, context: ContextTypes.DEFAULT_TYPE)
     try:
         await query.message.delete()
         await deliver_word(context, query.message.chat_id, word_info,
-                           next_keyboard, prefix=f"{feedback}\n\n")
+                           next_keyboard, prefix=f"{feedback}\n\n", lang=lang)
     except Exception as e:
         logging.info(f"Couldn't replace quiz message ({e}); editing instead.")
-        response = f"{feedback}\n\n{format_word_message(word_info)}"
+        response = f"{feedback}\n\n{format_word_message(word_info, lang)}"
         await query.message.edit_text(response, reply_markup=next_keyboard,
                                       parse_mode='Markdown')
 
@@ -756,10 +942,20 @@ async def on_error(update: object, context: ContextTypes.DEFAULT_TYPE):
     logging.error("Unhandled error while processing update", exc_info=err)
 
     if isinstance(update, Update) and update.effective_chat:
+        # Look up the language defensively. This handler runs *because*
+        # something already failed — quite possibly the database — so a
+        # failed lookup must not stop the user being told anything at all.
+        lang = "ru"
+        try:
+            if update.effective_user:
+                lang = get_user_lang(update.effective_user.id)
+        except Exception:
+            logging.warning("Couldn't read user language in error handler")
+
         try:
             await context.bot.send_message(
                 chat_id=update.effective_chat.id,
-                text="⚠️ Что-то пошло не так. Попробуйте /start"
+                text=t("generic_err", lang)
             )
         except Exception:
             # Never let the error handler itself raise.
@@ -827,8 +1023,10 @@ async def send_daily_word(context: ContextTypes.DEFAULT_TYPE):
             if word is None:
                 logging.warning("Daily word skipped: word table is empty")
                 continue
-            await deliver_word(context, chat_id, word, get_keyboard(),
-                               prefix="☀️ **Daily Word!**\n\n")
+            sub_lang = get_user_lang(chat_id)
+            await deliver_word(context, chat_id, word, get_keyboard(sub_lang),
+                               prefix=f"{t('daily_header', sub_lang)}\n\n",
+                               lang=sub_lang)
         except Forbidden:
             # User blocked the bot — stop trying to reach them every morning.
             logging.info(f"{chat_id} blocked the bot; unsubscribing them.")
