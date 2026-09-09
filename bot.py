@@ -1,9 +1,13 @@
+import asyncio
 import datetime
+import hashlib
 import json
 import logging
 import os
 import random
+import shutil
 import sqlite3  # Added SQLite
+import tempfile
 
 from zoneinfo import ZoneInfo
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
@@ -28,6 +32,16 @@ if not TOKEN:
         "next to bot.py (see .env.example)."
     )
 DB_NAME = 'japanese_bot.db'  # Switched to DB
+
+# Levels the bot offers, in learning order. Add a tuple here (and words at
+# that level in the DB) to introduce N2/N1 — the settings menu, the daily
+# job and the quiz all read from this list, so nothing else needs editing.
+LEVELS = [
+    ("N5", "Beginner"),
+    ("N4", "Elementary"),
+    ("N3", "Intermediate"),
+]
+VALID_LEVELS = [code for code, _ in LEVELS]
 SUBSCRIBERS_FILE = 'subscribers.json'
 
 # --- LOGGING SETUP ---
@@ -81,6 +95,18 @@ def init_db():
     ''')
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_words_level ON words(level)")
 
+    # Maps a piece of Japanese text to the Telegram file_id of its audio.
+    # Once a word has been voiced once, every later playback reuses the
+    # file_id — no TTS call, no upload, no local file.
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS audio_cache (
+            text_hash TEXT PRIMARY KEY,
+            text TEXT NOT NULL,
+            file_id TEXT NOT NULL,
+            created_at TEXT NOT NULL
+        )
+    ''')
+
     # Remembers which daily words each subscriber has already received, so
     # the daily pick can avoid repeats until their level is exhausted.
     cursor.execute('''
@@ -94,6 +120,16 @@ def init_db():
 
     conn.commit()
     conn.close()
+
+
+def count_words_by_level():
+    """{'N5': 200, 'N4': 262, ...} — used to show sizes in the settings menu."""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT level, COUNT(*) AS n FROM words GROUP BY level")
+    counts = {row["level"]: row["n"] for row in cursor.fetchall()}
+    conn.close()
+    return counts
 
 
 def load_words(level=None):
@@ -228,6 +264,16 @@ def format_word_message(word_data):
     return msg
 
 
+def get_word_keyboard(word_data):
+    """Main menu plus a 'listen' button for this specific word."""
+    base = get_keyboard().inline_keyboard
+    listen_row = [InlineKeyboardButton(
+        f"🔊 Послушать {word_data['word']}",
+        callback_data=f"say_{word_data['word']}"
+    )]
+    return InlineKeyboardMarkup([listen_row] + list(base))
+
+
 def get_keyboard():
     keyboard = [
         [InlineKeyboardButton("🎲 Get Random Word", callback_data='random')],
@@ -237,6 +283,129 @@ def get_keyboard():
         [InlineKeyboardButton("🔕 Unsubscribe", callback_data='unsubscribe')]
     ]
     return InlineKeyboardMarkup(keyboard)
+
+
+# --- AUDIO / PRONUNCIATION ---
+
+# Which text-to-speech backend to use: "edge" (Microsoft neural voices,
+# better Japanese) or "gtts" (Google Translate). Both are free but
+# unofficial, so if one starts failing, switch with the TTS_ENGINE env var
+# instead of editing code.
+TTS_ENGINE = os.getenv("TTS_ENGINE", "edge").lower()
+TTS_VOICE = os.getenv("TTS_VOICE", "ja-JP-NanamiNeural")
+
+
+def _text_hash(text):
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()[:32]
+
+
+def get_cached_audio(text):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT file_id FROM audio_cache WHERE text_hash = ?", (_text_hash(text),))
+    row = cursor.fetchone()
+    conn.close()
+    return row["file_id"] if row else None
+
+
+def save_cached_audio(text, file_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "INSERT OR REPLACE INTO audio_cache (text_hash, text, file_id, created_at) "
+        "VALUES (?, ?, ?, ?)",
+        (_text_hash(text), text, file_id, datetime.date.today().isoformat())
+    )
+    conn.commit()
+    conn.close()
+
+
+def drop_cached_audio(text):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM audio_cache WHERE text_hash = ?", (_text_hash(text),))
+    conn.commit()
+    conn.close()
+
+
+async def _tts_to_mp3(text, mp3_path):
+    """Writes speech for `text` to mp3_path. Returns True on success."""
+    if TTS_ENGINE == "edge":
+        import edge_tts
+        communicate = edge_tts.Communicate(text, TTS_VOICE)
+        await communicate.save(mp3_path)
+    else:
+        from gtts import gTTS
+        # gTTS is synchronous and does network I/O, so it must not run on
+        # the event loop or it blocks every other user's request.
+        await asyncio.to_thread(lambda: gTTS(text, lang="ja").save(mp3_path))
+    return os.path.exists(mp3_path) and os.path.getsize(mp3_path) > 0
+
+
+async def _mp3_to_ogg(mp3_path, ogg_path):
+    """Converts to OGG/OPUS, which is what Telegram voice messages require.
+
+    Returns True on success. If ffmpeg is missing we fall back to sending
+    the MP3 as an audio file instead — playable, just a less tidy bubble.
+    """
+    if not shutil.which("ffmpeg"):
+        return False
+    proc = await asyncio.create_subprocess_exec(
+        "ffmpeg", "-i", mp3_path, "-c:a", "libopus", "-b:a", "32k",
+        "-y", ogg_path,
+        stdout=asyncio.subprocess.DEVNULL, stderr=asyncio.subprocess.DEVNULL,
+    )
+    await proc.communicate()
+    return proc.returncode == 0 and os.path.exists(ogg_path) and os.path.getsize(ogg_path) > 0
+
+
+async def send_pronunciation(update: Update, context: ContextTypes.DEFAULT_TYPE, text):
+    """Sends spoken audio for `text`, generating it only the first time."""
+    query = update.callback_query
+    chat_id = query.message.chat_id
+
+    cached = get_cached_audio(text)
+    if cached:
+        try:
+            await context.bot.send_voice(chat_id=chat_id, voice=cached, caption=f"🔊 {text}")
+            return
+        except BadRequest:
+            # Telegram file_ids can go stale; regenerate rather than fail.
+            logging.info(f"Stale file_id for {text!r}; regenerating.")
+            drop_cached_audio(text)
+
+    await query.answer("🔊 Готовлю озвучку…")
+
+    with tempfile.TemporaryDirectory() as tmp:
+        mp3_path = os.path.join(tmp, "a.mp3")
+        ogg_path = os.path.join(tmp, "a.ogg")
+        try:
+            if not await _tts_to_mp3(text, mp3_path):
+                raise RuntimeError("TTS produced no audio")
+        except Exception as e:
+            logging.error(f"TTS failed for {text!r}: {e}")
+            await context.bot.send_message(
+                chat_id=chat_id,
+                text="🔇 Озвучка сейчас недоступна. Попробуйте позже."
+            )
+            return
+
+        sent = None
+        if await _mp3_to_ogg(mp3_path, ogg_path):
+            with open(ogg_path, "rb") as f:
+                sent = await context.bot.send_voice(chat_id=chat_id, voice=f, caption=f"🔊 {text}")
+        else:
+            with open(mp3_path, "rb") as f:
+                sent = await context.bot.send_audio(chat_id=chat_id, audio=f, title=text)
+
+    # Cache Telegram's own id so this word is never synthesized again.
+    file_id = None
+    if sent and sent.voice:
+        file_id = sent.voice.file_id
+    elif sent and sent.audio:
+        file_id = sent.audio.file_id
+    if file_id:
+        save_cached_audio(text, file_id)
 
 
 # --- SETTINGS MENU ---
@@ -251,18 +420,26 @@ async def settings_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
         send = update.message.reply_text
 
     current_level = get_user_level(user_id)
+    counts = count_words_by_level()
+
     text = (
         f"⚙️ **Settings**\n\n"
         f"Current Level: **{current_level}**\n"
         "Choose your difficulty level:"
     )
-    keyboard = [
-        [
-            InlineKeyboardButton(f"{'✅ ' if current_level == 'N5' else ''}N5 (Beginner)", callback_data='set_N5'),
-            InlineKeyboardButton(f"{'✅ ' if current_level == 'N4' else ''}N4 (Elementary)", callback_data='set_N4')
-        ],
-        [InlineKeyboardButton("🔙 Back to Menu", callback_data='menu_main')]
-    ]
+
+    # One row per level, built from LEVELS so adding N2/N1 needs no edit here.
+    # The word count is shown so an empty level is obvious before it's picked.
+    keyboard = []
+    for code, label in LEVELS:
+        mark = '✅ ' if current_level == code else ''
+        n = counts.get(code, 0)
+        keyboard.append([InlineKeyboardButton(
+            f"{mark}{code} ({label}) — {n} слов",
+            callback_data=f'set_{code}'
+        )])
+    keyboard.append([InlineKeyboardButton("🔙 Back to Menu", callback_data='menu_main')])
+
     await send(text, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode='Markdown')
 
 
@@ -327,7 +504,8 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             return
         random_word = random.choice(words)
         msg = format_word_message(random_word)
-        await query.message.reply_text(msg, parse_mode='Markdown', reply_markup=get_keyboard())
+        await query.message.reply_text(msg, parse_mode='Markdown',
+                                       reply_markup=get_word_keyboard(random_word))
 
     elif query.data == 'quiz_start':
         await start_quiz(update, context)
@@ -338,8 +516,15 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif query.data == 'settings_menu':
         await settings_menu(update, context)
 
-    elif query.data in ['set_N5', 'set_N4']:
-        new_level = query.data.split('_')[1]
+    elif query.data.startswith('say_'):
+        # maxsplit keeps words containing '_' intact.
+        await send_pronunciation(update, context, query.data.split('_', 1)[1])
+
+    elif query.data.startswith('set_'):
+        new_level = query.data[len('set_'):]
+        if new_level not in VALID_LEVELS:
+            await query.answer("Неизвестный уровень.", show_alert=True)
+            return
         save_user_setting(user_id, new_level)
         await settings_menu(update, context)
 
@@ -454,7 +639,9 @@ async def handle_quiz_answer(update: Update, context: ContextTypes.DEFAULT_TYPE)
         feedback = f"❌ **Wrong!**\n🎮 Total XP: {xp}\n\nThe correct answer was **{word_info['en_meaning']} / {word_info['ru_meaning']}**."
 
     response = f"{feedback}\n\n{format_word_message(word_info)}"
-    next_keyboard = [[InlineKeyboardButton("🔄 Next Question", callback_data='quiz_start')],
+    next_keyboard = [[InlineKeyboardButton(f"🔊 Послушать {word_info['word']}",
+                                           callback_data=f"say_{word_info['word']}")],
+                     [InlineKeyboardButton("🔄 Next Question", callback_data='quiz_start')],
                      [InlineKeyboardButton("🏁 Menu", callback_data='menu_main')]]
 
     await query.message.edit_text(response, reply_markup=InlineKeyboardMarkup(next_keyboard), parse_mode='Markdown')
@@ -551,7 +738,7 @@ async def send_daily_word(context: ContextTypes.DEFAULT_TYPE):
                 logging.warning("Daily word skipped: word table is empty")
                 continue
             await context.bot.send_message(chat_id=chat_id, text=f"☀️ **Daily Word!**\n\n{format_word_message(word)}",
-                                           parse_mode='Markdown', reply_markup=get_keyboard())
+                                           parse_mode='Markdown', reply_markup=get_word_keyboard(word))
         except Forbidden:
             # User blocked the bot — stop trying to reach them every morning.
             logging.info(f"{chat_id} blocked the bot; unsubscribing them.")
