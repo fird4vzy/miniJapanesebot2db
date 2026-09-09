@@ -1,2 +1,15 @@
+# Pinned exactly: with >= constraints, every deploy runs `pip install` and can
+# silently pull a new major version. python-telegram-bot has had breaking
+# majors (v20, v21, v22), so an unpinned deploy can break the bot with no
+# change to your own code.
+#
+# To upgrade deliberately: bump the number here, deploy, and check the bot
+# still works. Never let it happen by accident.
 python-telegram-bot[job-queue]==22.7
 python-dotenv==1.2.2
+
+# Pronunciation (🔊 button). edge-tts is the default engine; gTTS is the
+# fallback you can switch to with TTS_ENGINE=gtts if edge starts failing.
+# Both are free but unofficial — run check_tts.py to verify they work.
+edge-tts==7.2.8
+gTTS==2.5.4
