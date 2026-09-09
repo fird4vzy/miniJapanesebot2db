@@ -11,6 +11,7 @@ import tempfile
 
 from zoneinfo import ZoneInfo
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.constants import ChatAction
 from telegram.error import BadRequest, Forbidden
 from telegram.helpers import escape_markdown
 from telegram.ext import (
@@ -264,16 +265,6 @@ def format_word_message(word_data):
     return msg
 
 
-def get_word_keyboard(word_data):
-    """Main menu plus a 'listen' button for this specific word."""
-    base = get_keyboard().inline_keyboard
-    listen_row = [InlineKeyboardButton(
-        f"🔊 Послушать {word_data['word']}",
-        callback_data=f"say_{word_data['word']}"
-    )]
-    return InlineKeyboardMarkup([listen_row] + list(base))
-
-
 def get_keyboard():
     keyboard = [
         [InlineKeyboardButton("🎲 Get Random Word", callback_data='random')],
@@ -357,6 +348,94 @@ async def _mp3_to_ogg(mp3_path, ogg_path):
     )
     await proc.communicate()
     return proc.returncode == 0 and os.path.exists(ogg_path) and os.path.getsize(ogg_path) > 0
+
+
+CAPTION_LIMIT = 1024  # Telegram's cap on media captions
+
+
+async def _get_or_make_audio(context, chat_id, text):
+    """Returns a Telegram file_id for `text`, generating audio if needed.
+
+    Returns None if speech can't be produced, so callers can fall back to
+    a plain text message rather than showing the user nothing.
+    """
+    cached = get_cached_audio(text)
+    if cached:
+        return cached
+
+    # Generation takes a second or two — show the recording indicator so the
+    # chat doesn't just sit there looking frozen.
+    try:
+        await context.bot.send_chat_action(chat_id=chat_id, action=ChatAction.RECORD_VOICE)
+    except Exception:
+        pass  # cosmetic only; never let it block the actual message
+
+    with tempfile.TemporaryDirectory() as tmp:
+        mp3_path = os.path.join(tmp, "a.mp3")
+        ogg_path = os.path.join(tmp, "a.ogg")
+        try:
+            if not await _tts_to_mp3(text, mp3_path):
+                raise RuntimeError("TTS produced no audio")
+        except Exception as e:
+            logging.error(f"TTS failed for {text!r}: {e}")
+            return None
+
+        # Upload once to a throwaway message purely to obtain a file_id we
+        # can attach to the real message. Deleting it does not invalidate
+        # the file_id, so every later send is instant.
+        try:
+            if await _mp3_to_ogg(mp3_path, ogg_path):
+                with open(ogg_path, "rb") as f:
+                    tmp_msg = await context.bot.send_voice(chat_id=chat_id, voice=f,
+                                                           disable_notification=True)
+                file_id = tmp_msg.voice.file_id
+            else:
+                with open(mp3_path, "rb") as f:
+                    tmp_msg = await context.bot.send_audio(chat_id=chat_id, audio=f,
+                                                           disable_notification=True)
+                file_id = tmp_msg.audio.file_id
+        except Exception as e:
+            logging.error(f"Audio upload failed for {text!r}: {e}")
+            return None
+
+    try:
+        await context.bot.delete_message(chat_id=chat_id, message_id=tmp_msg.message_id)
+    except Exception:
+        # Couldn't tidy up the placeholder — harmless, the real message
+        # still follows.
+        pass
+
+    save_cached_audio(text, file_id)
+    return file_id
+
+
+async def deliver_word(context, chat_id, word_data, keyboard, prefix=""):
+    """Sends a word as ONE message: audio player + full text + buttons.
+
+    Telegram can't put a playable clip inside a text message, but a voice
+    message can carry the text as its caption — which gives a single
+    bubble instead of a text message followed by a separate voice note.
+    """
+    caption = prefix + format_word_message(word_data)
+    file_id = None
+    if len(caption) <= CAPTION_LIMIT:
+        file_id = await _get_or_make_audio(context, chat_id, word_data["word"])
+
+    if file_id:
+        try:
+            return await context.bot.send_voice(
+                chat_id=chat_id, voice=file_id, caption=caption,
+                parse_mode='Markdown', reply_markup=keyboard
+            )
+        except BadRequest as e:
+            # Stale file_id, or a caption Telegram won't accept — fall
+            # through to plain text rather than dropping the word.
+            logging.info(f"send_voice failed for {word_data['word']!r}: {e}")
+            drop_cached_audio(word_data["word"])
+
+    return await context.bot.send_message(
+        chat_id=chat_id, text=caption, parse_mode='Markdown', reply_markup=keyboard
+    )
 
 
 async def send_pronunciation(update: Update, context: ContextTypes.DEFAULT_TYPE, text):
@@ -503,9 +582,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             )
             return
         random_word = random.choice(words)
-        msg = format_word_message(random_word)
-        await query.message.reply_text(msg, parse_mode='Markdown',
-                                       reply_markup=get_word_keyboard(random_word))
+        await deliver_word(context, query.message.chat_id, random_word, get_keyboard())
 
     elif query.data == 'quiz_start':
         await start_quiz(update, context)
@@ -517,7 +594,9 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await settings_menu(update, context)
 
     elif query.data.startswith('say_'):
-        # maxsplit keeps words containing '_' intact.
+        # Audio is now attached to the word message itself, so nothing new
+        # renders this button — but messages already sitting in people's
+        # chat history still have it, and it should keep working.
         await send_pronunciation(update, context, query.data.split('_', 1)[1])
 
     elif query.data.startswith('set_'):
@@ -638,13 +717,24 @@ async def handle_quiz_answer(update: Update, context: ContextTypes.DEFAULT_TYPE)
         xp = stats['xp'] if isinstance(stats, sqlite3.Row) else 0
         feedback = f"❌ **Wrong!**\n🎮 Total XP: {xp}\n\nThe correct answer was **{word_info['en_meaning']} / {word_info['ru_meaning']}**."
 
-    response = f"{feedback}\n\n{format_word_message(word_info)}"
-    next_keyboard = [[InlineKeyboardButton(f"🔊 Послушать {word_info['word']}",
-                                           callback_data=f"say_{word_info['word']}")],
-                     [InlineKeyboardButton("🔄 Next Question", callback_data='quiz_start')],
-                     [InlineKeyboardButton("🏁 Menu", callback_data='menu_main')]]
+    next_keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🔄 Next Question", callback_data='quiz_start')],
+        [InlineKeyboardButton("🏁 Menu", callback_data='menu_main')]
+    ])
 
-    await query.message.edit_text(response, reply_markup=InlineKeyboardMarkup(next_keyboard), parse_mode='Markdown')
+    # A text message can't be edited into a voice message, so to keep the
+    # answer in a single bubble we replace it: delete the question, send the
+    # result with the audio attached. If deleting isn't allowed (messages
+    # older than 48h can't be), fall back to editing in place as before.
+    try:
+        await query.message.delete()
+        await deliver_word(context, query.message.chat_id, word_info,
+                           next_keyboard, prefix=f"{feedback}\n\n")
+    except Exception as e:
+        logging.info(f"Couldn't replace quiz message ({e}); editing instead.")
+        response = f"{feedback}\n\n{format_word_message(word_info)}"
+        await query.message.edit_text(response, reply_markup=next_keyboard,
+                                      parse_mode='Markdown')
 
 
 # --- ERROR HANDLER ---
@@ -737,8 +827,8 @@ async def send_daily_word(context: ContextTypes.DEFAULT_TYPE):
             if word is None:
                 logging.warning("Daily word skipped: word table is empty")
                 continue
-            await context.bot.send_message(chat_id=chat_id, text=f"☀️ **Daily Word!**\n\n{format_word_message(word)}",
-                                           parse_mode='Markdown', reply_markup=get_word_keyboard(word))
+            await deliver_word(context, chat_id, word, get_keyboard(),
+                               prefix="☀️ **Daily Word!**\n\n")
         except Forbidden:
             # User blocked the bot — stop trying to reach them every morning.
             logging.info(f"{chat_id} blocked the bot; unsubscribing them.")
