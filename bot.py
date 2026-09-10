@@ -425,24 +425,6 @@ def words_count_label(n, lang):
     return f"{n} {form}"
 
 
-def get_user_lang(user_id, telegram_code=None):
-    """The user's interface language.
-
-    First contact seeds it from Telegram's own language setting, so a
-    Russian-speaking user gets Russian without touching the menu.
-    """
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute("SELECT lang FROM users WHERE user_id = ?", (user_id,))
-    row = cursor.fetchone()
-    conn.close()
-    if row and row["lang"]:
-        return row["lang"]
-    if telegram_code and telegram_code.lower().startswith("ru"):
-        return "ru"
-    return "en" if telegram_code else "ru"
-
-
 def save_user_lang(user_id, lang):
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -453,6 +435,35 @@ def save_user_lang(user_id, lang):
     )
     conn.commit()
     conn.close()
+
+
+DEFAULT_LANG = "ru"
+
+
+def get_user_lang(user_id, telegram_code=None):
+    """The user's interface language.
+
+    Resolves ONCE and writes the answer back. An earlier version computed a
+    fallback on every call without saving it, so the answer depended on
+    whether the caller happened to pass a Telegram hint: /settings (no hint)
+    said Russian while /start (hint "en") said English, for the same person,
+    with nothing stored either way. Persisting here means every call site
+    agrees from then on.
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT lang FROM users WHERE user_id = ?", (user_id,))
+    row = cursor.fetchone()
+    conn.close()
+    if row and row["lang"]:
+        return row["lang"]
+
+    if telegram_code:
+        resolved = "ru" if telegram_code.lower().startswith("ru") else "en"
+    else:
+        resolved = DEFAULT_LANG
+    save_user_lang(user_id, resolved)
+    return resolved
 
 
 def _text_hash(text):
@@ -622,7 +633,7 @@ async def send_pronunciation(update: Update, context: ContextTypes.DEFAULT_TYPE,
             logging.info(f"Stale file_id for {text!r}; regenerating.")
             drop_cached_audio(text)
 
-    lang = get_user_lang(query.from_user.id)
+    lang = get_user_lang(query.from_user.id, getattr(query.from_user, "language_code", None))
     await query.answer(t("tts_busy", lang))
 
     with tempfile.TemporaryDirectory() as tmp:
@@ -669,7 +680,7 @@ async def settings_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
         send = update.message.reply_text
 
     current_level = get_user_level(user_id)
-    lang = get_user_lang(user_id)
+    lang = get_user_lang(user_id, getattr(update.effective_user, "language_code", None))
     counts = count_words_by_level()
     lang_name = dict(UI_LANGUAGES).get(lang, lang)
 
@@ -755,7 +766,11 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 reply_markup=get_keyboard(lang)
             )
             return
-        random_word = random.choice(words)
+        # Uses the same shuffle bag as the daily word rather than a bare
+        # random.choice, which has no memory and happily repeats a word you
+        # just saw. Sharing one bag across both also means the morning word
+        # won't echo something you pulled up yourself an hour earlier.
+        random_word = pick_unseen_word(user_id, user_level) or random.choice(words)
         await deliver_word(context, query.message.chat_id, random_word,
                            get_keyboard(lang), lang=lang)
 
@@ -816,13 +831,29 @@ async def start_quiz(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.callback_query:
         query = update.callback_query
         user_id = query.from_user.id
-        send = query.message.edit_text
+
+        if query.message.text is not None:
+            # A plain text question: edit it in place, which keeps the chat tidy.
+            send = query.message.edit_text
+        else:
+            # The previous answer was a VOICE message with a caption.
+            # edit_text can't touch media (Telegram: "there is no text in the
+            # message to edit"), and editing the caption would leave the old
+            # word's audio attached to a new question. Replace it instead.
+            async def send(text, **kwargs):
+                try:
+                    await query.message.delete()
+                except Exception:
+                    pass  # too old to delete; a new message below is still fine
+                return await context.bot.send_message(
+                    chat_id=query.message.chat_id, text=text, **kwargs
+                )
     else:
         user_id = update.effective_user.id
         send = update.message.reply_text
 
     user_level = get_user_level(user_id)
-    lang = get_user_lang(user_id)
+    lang = get_user_lang(user_id, getattr(update.effective_user, "language_code", None))
 
     # Fetch words from DB based on level
     filtered_words = load_words(user_level)
@@ -871,7 +902,7 @@ async def handle_quiz_answer(update: Update, context: ContextTypes.DEFAULT_TYPE)
     user_id = query.from_user.id
 
     # maxsplit=2 so a word containing '_' can't break the unpack.
-    lang = get_user_lang(user_id)
+    lang = get_user_lang(user_id, getattr(query.from_user, "language_code", None))
 
     parts = query.data.split('_', 2)
     if len(parts) != 3:
@@ -909,18 +940,32 @@ async def handle_quiz_answer(update: Update, context: ContextTypes.DEFAULT_TYPE)
     ])
 
     # A text message can't be edited into a voice message, so to keep the
-    # answer in a single bubble we replace it: delete the question, send the
-    # result with the audio attached. If deleting isn't allowed (messages
-    # older than 48h can't be), fall back to editing in place as before.
+    # answer in a single bubble we replace it: delete the question, then send
+    # the result with the audio attached.
+    #
+    # The delete and the send are tracked separately on purpose. An earlier
+    # version wrapped both in one try and fell back to edit_text — but if the
+    # delete had already succeeded, that edit targeted a message that no
+    # longer existed and raised, surfacing as "something went wrong".
+    deleted = False
     try:
         await query.message.delete()
+        deleted = True
+    except Exception as e:
+        logging.info(f"Couldn't delete the quiz question ({e}); leaving it.")
+
+    try:
         await deliver_word(context, query.message.chat_id, word_info,
                            next_keyboard, prefix=f"{feedback}\n\n", lang=lang)
     except Exception as e:
-        logging.info(f"Couldn't replace quiz message ({e}); editing instead.")
+        logging.error(f"Couldn't deliver the quiz result ({e}); sending plain text.")
         response = f"{feedback}\n\n{format_word_message(word_info, lang)}"
-        await query.message.edit_text(response, reply_markup=next_keyboard,
-                                      parse_mode='Markdown')
+        if deleted:
+            await context.bot.send_message(chat_id=query.message.chat_id, text=response,
+                                           reply_markup=next_keyboard, parse_mode='Markdown')
+        else:
+            await query.message.edit_text(response, reply_markup=next_keyboard,
+                                          parse_mode='Markdown')
 
 
 # --- ERROR HANDLER ---
