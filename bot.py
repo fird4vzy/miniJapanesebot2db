@@ -668,13 +668,44 @@ async def send_pronunciation(update: Update, context: ContextTypes.DEFAULT_TYPE,
         save_cached_audio(text, file_id)
 
 
+async def edit_or_replace(query, context, text, reply_markup=None, parse_mode='Markdown'):
+    """Shows `text` in place of the message a button was pressed on.
+
+    Word cards are voice messages now, and Telegram cannot edit text into a
+    message that carries audio — edit_text on one fails with "there is no
+    text in the message to edit". Every screen reachable from a word card
+    (menu, settings, quiz) therefore has to REPLACE the message rather than
+    edit it. Plain text messages are still edited in place, which keeps the
+    chat from filling up.
+    """
+    if query.message.text is not None:
+        try:
+            return await query.message.edit_text(
+                text, reply_markup=reply_markup, parse_mode=parse_mode)
+        except BadRequest as e:
+            if "not modified" in str(e).lower():
+                return None  # double tap on the same button; nothing to do
+            logging.info(f"edit_text failed ({e}); replacing the message.")
+
+    try:
+        await query.message.delete()
+    except Exception:
+        pass  # too old to delete — the replacement below still lands
+
+    return await context.bot.send_message(
+        chat_id=query.message.chat_id, text=text,
+        reply_markup=reply_markup, parse_mode=parse_mode)
+
+
 # --- SETTINGS MENU ---
 
 async def settings_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.callback_query:
         query = update.callback_query
         user_id = query.from_user.id
-        send = query.message.edit_text
+
+        async def send(text, **kwargs):
+            return await edit_or_replace(query, context, text, **kwargs)
     else:
         user_id = update.effective_user.id
         send = update.message.reply_text
@@ -739,7 +770,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.message:
         await update.message.reply_text(text, reply_markup=get_keyboard(lang), parse_mode='Markdown')
     else:
-        await update.callback_query.message.edit_text(text, reply_markup=get_keyboard(lang), parse_mode='Markdown')
+        # Reached via the Menu button, which often sits on a voice word card.
+        await edit_or_replace(update.callback_query, context, text,
+                              reply_markup=get_keyboard(lang))
 
 
 async def info_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -832,22 +865,8 @@ async def start_quiz(update: Update, context: ContextTypes.DEFAULT_TYPE):
         query = update.callback_query
         user_id = query.from_user.id
 
-        if query.message.text is not None:
-            # A plain text question: edit it in place, which keeps the chat tidy.
-            send = query.message.edit_text
-        else:
-            # The previous answer was a VOICE message with a caption.
-            # edit_text can't touch media (Telegram: "there is no text in the
-            # message to edit"), and editing the caption would leave the old
-            # word's audio attached to a new question. Replace it instead.
-            async def send(text, **kwargs):
-                try:
-                    await query.message.delete()
-                except Exception:
-                    pass  # too old to delete; a new message below is still fine
-                return await context.bot.send_message(
-                    chat_id=query.message.chat_id, text=text, **kwargs
-                )
+        async def send(text, **kwargs):
+            return await edit_or_replace(query, context, text, **kwargs)
     else:
         user_id = update.effective_user.id
         send = update.message.reply_text
@@ -916,8 +935,8 @@ async def handle_quiz_answer(update: Update, context: ContextTypes.DEFAULT_TYPE)
     if word_info is None:
         # The word was renamed or removed since this message was sent —
         # e.g. pressing a button on an old message after a DB change.
-        await query.message.edit_text(
-            t("quiz_stale", lang),
+        await edit_or_replace(
+            query, context, t("quiz_stale", lang),
             reply_markup=InlineKeyboardMarkup([
                 [InlineKeyboardButton(t("btn_new_q", lang), callback_data='quiz_start')],
                 [InlineKeyboardButton(t("btn_menu", lang), callback_data='menu_main')]
